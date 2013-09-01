@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>DBA02 - Die Beste Antwort</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="../../assets/js/html5shiv.js"></script>
+		<script src="../../assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body><div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>DBA02 - Die Beste Antwort</h1>
+				<p>Wir fragen all' das, was Sie noch nie wissen wollten!</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div ID="frage">
+					<h2>Bitte beantworten Sie folgende Frage:</h3>
+					<h3>Welche der folgenden Aussagen verwundert Sie am meisten?</h3>
+					<form role="form" action="/auswertung.html">
+						<input type="hidden" name="Frage" value="FID-1">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="AID-1">
+								In den SQL-Modulen nichts über Datenbanken gelehrt...
+							</label>
+						</div>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="AID-2">
+								ERM kann sowohl "Enterprise Resource Planning" als auch "Entity-Relationship Modell" bedeuten...
+							</label>
+						</div>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="AID-42">
+								Zweiundvierzig.
+							</label>
+						</div>		   
+						<button type="submit" class="btn btn-default">Antworten & sehen, was andere geantwortet haben</button>
+					</form>
+				</div>
+			</div>
+	  
+			<div class="col-md-4">
+				<div ID="popular">
+					<h3>Beliebte Fragen</h3>
+					<ul>
+						<li><a href="/index?stellefrage=FID-18">
+							Wer wird Deutscher Meister?
+						</a></li>
+						<li><a href="/index?stellefrage=FID-23">
+							Wie lautet die Antowrt auf die große Frage des Lebens, des Universums, und einfach allem?
+						</a></li>
+					</ul>
+				</div>
+				<div ID="new">
+					<h3>Neue Fragen</h3>
+					<ul>
+						<li><a href="/index?stellefrage=FID-18">
+							Wer wird Deutscher Meister?
+						</a></li>
+						<li><a href="/index?stellefrage=FID-23">
+							Wie lautet die Antowrt auf die große Frage des Lebens, des Universums, und einfach allem?
+						</a></li>
+					</ul>
+				</div>
+				<div ID="more">
+					<h3>Fragen stellen</h3>
+					<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/anmeldung.html">Zur Anmeldeseite...</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p class="text-center"><br />(c) 2013 Yvonne Frenzel & Stefan Waidele<br />
+					Ein Projekt im Rahmen des Moduls DBA02 der AKAD Hochschule
+				</p>
+			</div>
+		</div>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="//code.jquery.com/jquery.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	</div>
+</body>
+</html>
