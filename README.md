@@ -12,10 +12,14 @@ Hierdurch wird ein modernes Layout erzielt, ohne dass der Seitenquellcode zu unÃ
 Einzelseiten
 ------------
 
-index.html -> Frage stellen
-auswertung.html -> Auswertung anzeigen
-anmeldung.html -> Login zum Adminbereich
+.../frage/<FID>      -> Frage mit der Frage-ID <FID> stellen
+.../auswertung/<FID> -> Auswertung anzeigen
+.../anmeldung        -> Login zum Adminbereich
+
+Diese URLs werden per .htaccess in
+.../index.php?show=frage&fid=<FID>
+	
+usw. umgewandelt.
 
 ToDo: 
-neuefrage.html -> Neue Frage eingeben
-antworten.html -> AntwortmÃ¶glichkeiten eingeben (und den Fragen zuordnen)
+neuefrage -> Neue Frage mit Antworten eingeben
