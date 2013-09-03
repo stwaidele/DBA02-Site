@@ -14,11 +14,12 @@
 		<script src="../../assets/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
-	<body><div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h1>DBA02 - Die Beste Antwort</h1>
-				<p>Wir fragen all' das, was Sie noch nie wissen wollten!</p>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>DBA02 - Die Beste Antwort</h1>
+					<p>Wir fragen all' das, was Sie noch nie wissen wollten!</p>
+				</div>
 			</div>
-		</div>
 		
