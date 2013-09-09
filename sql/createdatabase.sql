@@ -73,7 +73,7 @@ DROP TABLE IF EXISTS `mydb`.`Beantwortetmit` ;
 CREATE TABLE IF NOT EXISTS `mydb`.`Beantwortetmit` (
   `FID` INT NOT NULL,
   `AID` INT NOT NULL,
-  `Zeitstempel` DATETIME NOT NULL DEFAULT now(),
+  `Zeitstempel` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `UID` INT NOT NULL,
   PRIMARY KEY (`FID`, `AID`),
   INDEX `fk_Frage_has_Antwort_Antwort2_idx` (`AID` ASC),
