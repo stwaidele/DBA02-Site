@@ -15,6 +15,9 @@
 		<![endif]-->
 	</head>
 	<body>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="//code.jquery.com/jquery.js"></script>
+		
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
