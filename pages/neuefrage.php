@@ -17,10 +17,14 @@
 		<script>
 		$("#newanswer").click(function() 
 		{
-			$("<div class='form-group'>\
+			var nq = $("<div class='form-group'>\
 			<label for='antwort3'>Weitere Antwortmöglichkeit</label>\
-			<input type='text' class='form-control'  placeholder='Hier muss noch eine eindeutige HTML-ID generiert werden.'>\
-			</div>").appendTo("#answers");	
+			<div class='input-group'><input type='text' class='form-control'  placeholder='Hier muss noch eine eindeutige HTML-ID generiert werden.'>\
+			<span class='input-group-btn'><button type='button' class='btn btn-danger' aria-hidden='true'>&times;</button></span>\
+			</div></div>");
+			nq.hide();
+			nq.appendTo("#answers");
+			nq.slideDown();	
 		})
 		</script>
 		<button type="submit" class="btn btn-default">Frage & Antworten speichern</button>
