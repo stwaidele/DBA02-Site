@@ -27,8 +27,9 @@
 			nq.appendTo("#answers");
 			nq.slideDown();	
 			$(".delanswer").click(function(){
-				$(this).parent().parent().parent().slideUp();
-				$(this).parent().parent().parent().remove();
+				$(this).parent().parent().parent().slideUp("normal",
+					function() {$(this).remove();}
+				);
 			});
 		});
 		</script>
