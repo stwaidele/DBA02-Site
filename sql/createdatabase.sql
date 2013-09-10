@@ -1,102 +1,68 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+use dba02;
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
+drop table user;
+drop table frage;
+drop table antwort;
 
--- -----------------------------------------------------
--- Table `mydb`.`Frage`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Frage` ;
+CREATE TABLE user (
+  username VARCHAR(64) NOT NULL,
+  email VARCHAR(255),
+  pw VARCHAR(32) NOT NULL,
+  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`username`));
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Frage` (
-  `FID` INT NOT NULL,
-  `Text` VARCHAR(1000) NULL,
-  PRIMARY KEY (`FID`))
-ENGINE = InnoDB;
+CREATE TABLE frage (
+  fid INT NOT NULL AUTO_INCREMENT,
+  txt VARCHAR(1024) NOT NULL,
+  PRIMARY KEY (`fid`));
 
-
--- -----------------------------------------------------
--- Table `mydb`.`Antwort`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Antwort` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`Antwort` (
-  `AID` INT NOT NULL,
-  `Text` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`AID`))
-ENGINE = InnoDB;
+CREATE TABLE antwort (
+  aid INT NOT NULL AUTO_INCREMENT,
+  nr  INT NULL,
+  txt VARCHAR(1024) NOT NULL,
+  fid INT NOT NULL,
+  PRIMARY KEY (`aid`));
 
 
--- -----------------------------------------------------
--- Table `mydb`.`Antwortmoeglichkeit`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Antwortmoeglichkeit` ;
+# Zwei Admins
+# Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
+insert into user (username, email, pw) values ('yfrenzel', 'frenzel.yvonne@googlemail.com', md5(concat('yfrenzel','geheim')));
+insert into user (username, email, pw) values ('stwaidele', 'stefan@waidele.info', md5(concat('stwaidele','geheim')));
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Antwortmoeglichkeit` (
-  `FID` INT NOT NULL,
-  `AID` INT NOT NULL,
-  PRIMARY KEY (`FID`, `AID`),
-  INDEX `fk_Frage_has_Antwort_Antwort1_idx` (`AID` ASC),
-  INDEX `fk_Frage_has_Antwort_Frage_idx` (`FID` ASC),
-  CONSTRAINT `fk_Frage_has_Antwort_Frage`
-    FOREIGN KEY (`FID`)
-    REFERENCES `mydb`.`Frage` (`FID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Frage_has_Antwort_Antwort1`
-    FOREIGN KEY (`AID`)
-    REFERENCES `mydb`.`Antwort` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+# Beispielfragen
+insert into frage (txt) value ('Wie lautet die Antwort auf die große Frage nach dem Leben, dem Universum und einfach allem?');
+insert into frage (txt) value ('Wer wird deutscher Meister?');
+insert into frage (txt) value ('Welche der folgen Aussagen beunruhigt Sie am meisten?');
+insert into frage (txt) value ('Wer gewinnt die Bundeskanzlerwahl?');
 
+select * from frage;
 
--- -----------------------------------------------------
--- Table `mydb`.`Benutzer`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Benutzer` ;
+# nr legt die Reiehnfolge der Darstellung fest. Muss weder fortlaufend noch eindeutig sein.
+# Bei gleichen nr ist die Reihenfolge undefiniert. ('WTF' oder 'Hasta la vista' können je nach Implementierung nach '42' angezeigt werden).
+insert into antwort (nr, txt, fid) values ('1', 'Zweiundvierzig!', '1');
+insert into antwort (nr, txt, fid) values ('2', 'WTF??!', '1');
+insert into antwort (nr, txt, fid) values ('42', 'Basically...RUN!', '1');
+insert into antwort (nr, txt, fid) values ('2', 'Hasta la vista, Baby.', '1');
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Benutzer` (
-  `UID` INT NOT NULL,
-  `Password` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`UID`))
-ENGINE = InnoDB;
+# nr muss nicht ausgefüllt werden
+insert into antwort (txt, fid) values ('FC Bayern München', '2');
+insert into antwort (txt, fid) values ('Borussia Dortmund', '2');
+insert into antwort (txt, fid) values ('SC Freiburg', '2');
+insert into antwort (txt, fid) values ('Buchbinder Legionäre', '2');
+insert into antwort (txt, fid) values ('Daniel Fridman', '2');
 
+insert into antwort (txt, fid) values ('In den SQL-Modulen wird nichts über Datenbanken gelehrt!', '3');
+insert into antwort (txt, fid) values ('ERM könnte für Enterprise Resource Planning oder auch für Entity-Relationship-Model stehen.', '3');
+insert into antwort (txt, fid) values ('Zweiundvierzig.', '3');
+insert into antwort (txt, fid) values ('There are only 10 kinds of people: Those who understand binary and those who do not.', '3');
 
--- -----------------------------------------------------
--- Table `mydb`.`Beantwortetmit`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Beantwortetmit` ;
+insert into antwort (txt, fid) values ('Angela Merkel', '4');
+insert into antwort (txt, fid) values ('Peer Steinbrück', '4');
+insert into antwort (txt, fid) values ('Stefan Raab', '4');
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Beantwortetmit` (
-  `FID` INT NOT NULL,
-  `AID` INT NOT NULL,
-  `Zeitstempel` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `UID` INT NOT NULL,
-  PRIMARY KEY (`FID`, `AID`),
-  INDEX `fk_Frage_has_Antwort_Antwort2_idx` (`AID` ASC),
-  INDEX `fk_Frage_has_Antwort_Frage1_idx` (`FID` ASC),
-  INDEX `fk_Antwort_Benutzer1_idx` (`UID` ASC),
-  CONSTRAINT `fk_Frage_has_Antwort_Frage1`
-    FOREIGN KEY (`FID`)
-    REFERENCES `mydb`.`Frage` (`FID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Frage_has_Antwort_Antwort2`
-    FOREIGN KEY (`AID`)
-    REFERENCES `mydb`.`Antwort` (`AID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Antwort_Benutzer1`
-    FOREIGN KEY (`UID`)
-    REFERENCES `mydb`.`Benutzer` (`UID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+# Listet alle Fragen und die dazugehörigen Antwortmöglichkeiten auf:
+select frage.txt, antwort.txt from frage, antwort where antwort.fid = frage.fid order by frage.fid, antwort.nr;
 
+# Listet alle Antwortmöglichkeiten von Frage 1 auf:
+select txt from antwort where fid = 1 order by nr;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
