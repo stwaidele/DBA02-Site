@@ -3,6 +3,7 @@ use dba02;
 drop table user;
 drop table frage;
 drop table antwort;
+drop table geantwortet;
 
 CREATE TABLE user (
   username VARCHAR(64) NOT NULL,
@@ -23,6 +24,11 @@ CREATE TABLE antwort (
   fid INT NOT NULL,
   PRIMARY KEY (`aid`));
 
+CREATE TABLE geantwortet (
+  gid INT NOT NULL AUTO_INCREMENT,
+  aid INT NOT NULL,
+  zs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`gid`));
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
@@ -34,8 +40,6 @@ insert into frage (txt) value ('Wie lautet die Antwort auf die große Frage nach
 insert into frage (txt) value ('Wer wird deutscher Meister?');
 insert into frage (txt) value ('Welche der folgen Aussagen beunruhigt Sie am meisten?');
 insert into frage (txt) value ('Wer gewinnt die Bundeskanzlerwahl?');
-
-select * from frage;
 
 # nr legt die Reiehnfolge der Darstellung fest. Muss weder fortlaufend noch eindeutig sein.
 # Bei gleichen nr ist die Reihenfolge undefiniert. ('WTF' oder 'Hasta la vista' können je nach Implementierung nach '42' angezeigt werden).
@@ -60,9 +64,117 @@ insert into antwort (txt, fid) values ('Angela Merkel', '4');
 insert into antwort (txt, fid) values ('Peer Steinbrück', '4');
 insert into antwort (txt, fid) values ('Stefan Raab', '4');
 
-# Listet alle Fragen und die dazugehörigen Antwortmöglichkeiten auf:
-select frage.txt, antwort.txt from frage, antwort where antwort.fid = frage.fid order by frage.fid, antwort.nr;
+# Da der Primärschlüssel selbst hochzählt und der Zeitstempel automatisch gesetzt wird, 
+# muss beim "Beantworten" lediglich die AID angegeben werden:
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (2);
+insert into geantwortet (aid) value (2);
+insert into geantwortet (aid) value (2);
+insert into geantwortet (aid) value (2);
+insert into geantwortet (aid) value (2);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (3);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
+insert into geantwortet (aid) value (4);
 
-# Listet alle Antwortmöglichkeiten von Frage 1 auf:
-select txt from antwort where fid = 1 order by nr;
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (6);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (8);
+insert into geantwortet (aid) value (9);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (6);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (8);
+insert into geantwortet (aid) value (8);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (5);
+insert into geantwortet (aid) value (6);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (7);
+insert into geantwortet (aid) value (1);
+insert into geantwortet (aid) value (8);
+insert into geantwortet (aid) value (9);
 
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (12);
+insert into geantwortet (aid) value (12);
+insert into geantwortet (aid) value (13);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (12);
+insert into geantwortet (aid) value (12);
+insert into geantwortet (aid) value (13);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (10);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (11);
+insert into geantwortet (aid) value (13);
+insert into geantwortet (aid) value (13);
+
+insert into geantwortet (aid) value (14);
+insert into geantwortet (aid) value (14);
+insert into geantwortet (aid) value (14);
+insert into geantwortet (aid) value (14);
+insert into geantwortet (aid) value (15);
+insert into geantwortet (aid) value (15);
+insert into geantwortet (aid) value (15);
+insert into geantwortet (aid) value (16);
