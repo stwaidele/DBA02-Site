@@ -1,4 +1,4 @@
-use dba02;
+﻿use dba02;
 
 drop table user;
 drop table frage;
@@ -22,13 +22,15 @@ CREATE TABLE antwort (
   nr  INT NULL,
   txt VARCHAR(1024) NOT NULL,
   fid INT NOT NULL,
-  PRIMARY KEY (`aid`));
+  PRIMARY KEY (`aid`),
+  FOREIGN KEY (`fid`) REFERENCES frage(`fid`));
 
 CREATE TABLE geantwortet (
   gid INT NOT NULL AUTO_INCREMENT,
   aid INT NOT NULL,
   zs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`gid`));
+  PRIMARY KEY (`gid`),
+  FOREIGN KEY (`aid`) REFERENCES antwort(`aid`));
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
