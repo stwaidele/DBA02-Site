@@ -11,7 +11,7 @@
 <?php 
 
 //Verbindung zur DB
-$connection = @mysql_connect("localhost", "root", "");
+$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
 if ($connection == FALSE)
 {
 echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";

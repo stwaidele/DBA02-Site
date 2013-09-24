@@ -2,6 +2,7 @@
 $title="Start";
 $desc="DBA02 - Die Beste Antwort";
 include($_SERVER['DOCUMENT_ROOT'].'/includes/header.php'); 
+include($_SERVER['DOCUMENT_ROOT'].'/includes/dbconf.php'); 
 ?>
 <div class="row">
 	<div class="col-md-8">
