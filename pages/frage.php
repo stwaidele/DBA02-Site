@@ -1,26 +1,78 @@
+﻿
+<html>
+ 
+  <head>
+    
+  </head>
+
+
+<body>
+
+<?php 
+
+//Verbindung zur DB
+$connection = @mysql_connect("localhost", "root", "");
+if ($connection == FALSE)
+{
+echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
+exit();
+}
+
+
+mysql_select_db("dba02");
+
+//Erzeugung einer Zufallszahl zur Auswahl der Frage
+$result = mysql_query("Select * from frage");
+$anzahl = mysql_num_rows($result);
+$zufall = mt_rand(1, $anzahl);
+$frage = mysql_query ("Select txt from frage where fid=".$zufall);
+$auswahl = mysql_fetch_row($frage);
+
+$abfrantw = mysql_query ("Select txt from antwort where fid =".$zufall);
+$anzahlant = mysql_num_rows($abfrantw);
+
+$daten = $zufall;
+
+
+?>
+
 <div ID="frage">
 	<h2>Bitte beantworten Sie folgende Frage:</h3>
-		<h3>Welche der folgenden Aussagen verwundert Sie am meisten?</h3>
-		<h4>FID = "<?php echo $_GET["fid"]; ?>"</h4>
-		<form role="form" action="/auswertung/42">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="AID-1">
-					In den SQL-Modulen nichts über Datenbanken gelehrt...
-				</label>
-			</div>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="AID-2">
-					ERM kann sowohl "Enterprise Resource Planning" als auch "Entity-Relationship Modell" bedeuten...
-				</label>
-			</div>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="AID-42">
-					Zweiundvierzig.
-				</label>
-			</div>		   
+
+		<h3><?php echo $auswahl[0] ?></h3>
+		
+		<form role="form" action="/dba02/pages/auswertung.php" method ="post">
+
+		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
+
+<?php
+	for ($i = 1; $i <= $anzahlant; $i++) {
+ 
+	$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
+
+			printf("<div class=\"checkbox\">");
+				printf("<label>");
+				printf("<input type=\"checkbox\" name=\"AID-%d\">", $i);
+				echo $antwortm[0];
+			printf("</label>");
+			printf("</div>");
+}
+
+?>
+			 
 			<button type="submit" class="btn btn-default">Antworten & sehen, was andere geantwortet haben</button>
 		</form>
 	</div>
+	
+
+
+
+
+
+<?
+mysql_close($connection);
+?>
+
+
+</body>
+</html>
