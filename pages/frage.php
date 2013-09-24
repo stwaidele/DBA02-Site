@@ -41,7 +41,7 @@ $daten = $zufall;
 
 		<h3><?php echo $auswahl[0] ?></h3>
 		
-		<form role="form" action="/dba02/pages/auswertung.php" method ="post">
+		<form role="form" action="/dba02/index.php? show=auswertung" method ="post">
 
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 
