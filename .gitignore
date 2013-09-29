@@ -1,3 +1,5 @@
+/includes/dbconf.php
+
 *.acn
 *.acr
 *.alg
