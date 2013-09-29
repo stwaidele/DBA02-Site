@@ -1,14 +1,4 @@
-﻿
-<html>
- 
-  <head>
-    
-  </head>
-
-
-<body>
-
-<?php 
+﻿<?php 
 
 //Verbindung zur DB
 $connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
@@ -41,7 +31,7 @@ $daten = $zufall;
 
 		<h3><?php echo $auswahl[0] ?></h3>
 		
-		<form role="form" action="/dba02/index.php? show=auswertung" method ="post">
+		<form role="form" action="/auswertung/<?php echo $zufall ?>" method ="post">
 
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 
@@ -63,16 +53,7 @@ $daten = $zufall;
 			<button type="submit" class="btn btn-default">Antworten & sehen, was andere geantwortet haben</button>
 		</form>
 	</div>
-	
-
-
-
-
-
 <?
 mysql_close($connection);
 ?>
 
-
-</body>
-</html>
