@@ -9,11 +9,10 @@ drop table antwort;
 drop table geantwortet;
 
 CREATE TABLE user (
-  username VARCHAR(64) NOT NULL,
-  email VARCHAR(255),
+  email VARCHAR(255) NOT NULL,
   pw VARCHAR(32) NOT NULL,
   create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`username`));
+  PRIMARY KEY (`email`));
 
 CREATE TABLE frage (
   fid INT NOT NULL AUTO_INCREMENT,
@@ -37,8 +36,8 @@ CREATE TABLE geantwortet (
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
-insert into user (username, email, pw) values ('yfrenzel', 'frenzel.yvonne@googlemail.com', md5(concat('yfrenzel','geheim')));
-insert into user (username, email, pw) values ('stwaidele', 'stefan@waidele.info', md5(concat('stwaidele','geheim')));
+insert into user (email, pw) values ('frenzel.yvonne@googlemail.com', 'geheim');
+insert into user (email, pw) values ('stefan@waidele.info', 'geheim');
 
 # Beispielfragen
 insert into frage (txt) value ('Wie lautet die Antwort auf die große Frage nach dem Leben, dem Universum und einfach allem?');
