@@ -9,6 +9,7 @@ if ($connection == FALSE) {
 }
 
 mysql_select_db("dba02");
+mysql_set_charset("utf8");
 
 $abfrage= mysql_query("Select txt from frage where fid=".$fid);
 $frage = mysql_fetch_row($abfrage);
@@ -42,15 +43,23 @@ $gesamtsumme = mysql_num_rows($abfrggesamtant);
 			$aid = $antwortm[1];
 			$abfrgeinzlantw = mysql_query("SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid);
 			$gesamtantm = mysql_num_rows($abfrgeinzlantw);
+
+			// US-Zahlenformat für Bootstrap
+			$rechnungUS = (100/$gesamtsumme)*$gesamtantm;
+			$rechnungUS = number_format($rechnungUS, 2,".",",");
+			$prozentUS = $rechnungUS."%";
+			$prozentUS= strval($prozentUS);
+
+			// Deutsches Zahlenformat für den User
 			$rechnung = (100/$gesamtsumme)*$gesamtantm;
 			$rechnung = number_format($rechnung, 2,",",".");
 			$prozent = $rechnung."%";
 			$prozent= strval($prozent);
 			printf("<div class=\"progress progress-striped\">");
 			printf("<div class=\"progress-bar\" role=\"progressbar\" 
-			aria-valuenow=\"10\"
-			aria-valuemin=\"0\" aria-valuemax=\"100\"
-			style=\"width: %s\">",$prozent);
+			aria-valuenow=\"%s\"", $prozentUS);
+			printf("aria-valuemin=\"0\" aria-valuemax=\"100\"
+			style=\"width: %s\">",$prozentUS);
 			printf("<span class=\"meter\">%s</span>",$prozent);
 		printf("</div>");
 	printf("</div>");

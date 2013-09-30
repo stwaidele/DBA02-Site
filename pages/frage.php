@@ -9,6 +9,7 @@ if ($connection == FALSE) {
 }
 
 mysql_select_db("dba02");
+mysql_set_charset("utf8");
 
 //Erzeugung einer Zufallszahl zur Auswahl der Frage
 $result = mysql_query("Select * from frage");
@@ -26,7 +27,7 @@ $daten = $zufall;
 <div ID="frage">
 	<h2>Bitte beantworten Sie folgende Frage:</h3>
 		<h3><?php echo $auswahl[0] ?></h3>
-		<form role="form" action="/dba02/index.php? show=auswertung" method ="post">
+		<form role="form" action="/index.php?show=auswertung" method ="post">
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 <?php
 	for ($i = 1; $i <= $anzahlant; $i++) {
