@@ -1,2 +1,2 @@
 # Sync Local MAMP & Public Webserver http://dba02.10100.de/
-rsync -r ~/Dropbox/02\ -\ AKAD/DBA02/DBA02-Site/* stwaidele@10100.de:/home/10100.de/dba02
+rsync -r /opt/local/apache2/vhosts/dba02.silvereye.local/DBA02-Site/* stwaidele@10100.de:/home/10100.de/dba02
