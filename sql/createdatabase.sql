@@ -1,4 +1,7 @@
-﻿use dba02;
+﻿drop database dba02;
+create database dba02 character set "utf8";
+	
+use dba02;
 
 drop table user;
 drop table frage;
@@ -58,7 +61,6 @@ insert into antwort (txt, fid) values ('Buchbinder Legionäre', '2');
 insert into antwort (txt, fid) values ('Daniel Fridman', '2');
 
 insert into antwort (txt, fid) values ('In den SQL-Modulen wird nichts über Datenbanken gelehrt!', '3');
-insert into antwort (txt, fid) values ('ERM könnte für Enterprise Resource Planning oder auch für Entity-Relationship-Model stehen.', '3');
 insert into antwort (txt, fid) values ('Zweiundvierzig.', '3');
 insert into antwort (txt, fid) values ('There are only 10 kinds of people: Those who understand binary and those who do not.', '3');
 
