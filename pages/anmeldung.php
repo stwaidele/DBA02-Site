@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	
 	// Benutzername und Passwort werden überprüft
 	// $passwort darf nicht leer sein, da sonst unbekannte Nutzer (wegen leerer Ergebnismenge der Abfrage) angemeldet wären
-	if (($pw[0] == $passwort) && ($password!='')) {
+	if (($pw[0] == $passwort) && ($passwort!='')) {
 		$_SESSION['angemeldet'] = true;
    
 		// Weiterleitung zur geschützten Startseite

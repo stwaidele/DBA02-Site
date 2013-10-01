@@ -1,10 +1,25 @@
 <?php
 if ($auth_angemeldet==FALSE) {
 	?>
-	<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/anmeldung">Zur Anmeldeseite...</a></p>
+	<p>Nur angemeldete Benutzer können neue Fragen stellen.</p>
+	<p>Warum Sie zwischen Frage-Eingabe und Speicherung nicht mehr angemeldet sind? Keine Ahnung. Das sollte eigentlich nicht passieren.</p>
+	<p>Wir bitten vielmals um Entschuldigung...</p>
+	<p><a href="/anmeldung">Zur Anmeldeseite...</a></p>
 	<?php
-} else {?>
+} else {
+	$fragetext = $_REQUEST["frage"];
+	$antworten = $_REQUEST["awm"];
+	
+//	$sql[0] = "insert into "
+	print $fragetext;
+	foreach ($antworten as $antwort) {
+		print $antwort;
+	}
+	
+?>
 	<div ID="NewQuestion">
+
+
 		<h3>Bitte geben Sie Ihre neue Frage ein:</h3>
 		<form role="form" action="/speichern" method="post">
 			<div class="form-group">
@@ -14,7 +29,7 @@ if ($auth_angemeldet==FALSE) {
 			<div id="answers">
 				<div class="form-group">
 					<label for="antwort1">1. Antwortmöglichkeit</label>
-					<input type="text" class="form-control" name='awm[]'  placeholder='Antwort eingeben...'>
+					<input type="text" class="form-control" name='awm[]'  placeholder="Antwort eingeben...">
 				</div>
 			</div>
 			<div class="form-group">
