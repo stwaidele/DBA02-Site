@@ -13,10 +13,32 @@ if ($auth_angemeldet==FALSE) {
 	// http://stackoverflow.com/a/1942432
 	$antworten = $_REQUEST["awm"];
 	
-//	$sql[0] = "insert into "
-	print $fragetext;
-	foreach ($antworten as $antwort) {
-		print $antwort;
+	//Verbindung zur DB
+	$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
+
+	if ($connection == FALSE) {
+		echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
+		exit();
+	}
+	mysql_select_db("dba02");
+	mysql_set_charset("utf8");
+	
+	$sql[0] = sprintf("insert into frage (txt) value ('%s')", mysql_real_escape_string($fragetext));
+	$result = mysql_query($sql[0]);
+	if(!$result) {
+		// Fehler
+	} else {
+		$fid = mysql_insert_id();
+		$n=1;
+		foreach ($antworten as $antwort) {
+			$sql[$n]=sprintf("insert into antwort (txt, fid) values ('%s','%s')", mysql_real_escape_string($antwort), $fid);
+			$result = mysql_query($sql[$n]);
+			$n++;
+		}
+	}	
+	// Debug
+	foreach ($sql as $q) {
+		print $q."<br />";
 	}
 	
 	// Nächste Frage...
