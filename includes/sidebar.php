@@ -8,19 +8,23 @@ mysql_select_db("dba02");
 mysql_set_charset("utf8");
 
 // Die 3 Fragen mit der höchsten FID
-// Warum funktioniert LIMIT nicht?
-$neuefragen = mysql_query("select * from frage  limit 0,3");
-$anzahlneu = mysql_num_rows($result);
+$neuefragen = mysql_query("select * from frage order by fid desc limit 0,3");
+$anzahlneu = mysql_num_rows($neuefragen);
+
+// Die 3 beliebtesten Fragen
+$popfragen = mysql_query("SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;");
+$anzahlpop = mysql_num_rows($neuefragen);
+
 ?>
 <div ID="popular">
 	<h3>Beliebte Fragen</h3>
 	<ul>
-		<li><a href="/frage/18">
-			Wer wird Deutscher Meister?
-		</a></li>
-		<li><a href="/frage/23">
-			Wie lautet die Antowrt auf die große Frage des Lebens, des Universums, und einfach allem?
-		</a></li>
+		<?php
+		for ($i = 1; $i <= $anzahlpop; $i++) {
+			$popfrage = mysql_fetch_assoc($popfragen);
+			printf ('<li><a href="/frage/%s">%s</a></li>', $popfrage['fid'], $popfrage['txt']);
+		} 
+		?>			
 	</ul>
 </div>
 <div ID="new">
@@ -28,7 +32,7 @@ $anzahlneu = mysql_num_rows($result);
 	<ul>
 		<?php
 		for ($i = 1; $i <= $anzahlneu; $i++) {
-			$neuefrage = mysql_fetch_assoc($result);
+			$neuefrage = mysql_fetch_assoc($neuefragen);
 			printf ('<li><a href="/frage/%s">%s</a></li>', $neuefrage['fid'], $neuefrage['txt']);
 		} 
 		?>			
