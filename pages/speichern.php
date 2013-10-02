@@ -26,20 +26,35 @@ if ($auth_angemeldet==FALSE) {
 	$sql[0] = sprintf("insert into frage (txt) value ('%s')", mysql_real_escape_string($fragetext));
 	$result = mysql_query($sql[0]);
 	if(!$result) {
-		// Fehler
+		?>
+		<h3>Das SQL-Insert hat einen Fehler gemeldet.</h3>
+		<?php
+		print $sql[0]."<br />";
+
+		// Debug
+		//foreach ($sql as $q) {
+		//	print "<p>"$q."</p>";
+		//}
 	} else {
 		$fid = mysql_insert_id();
 		$n=1;
 		foreach ($antworten as $antwort) {
 			$sql[$n]=sprintf("insert into antwort (txt, fid) values ('%s','%s')", mysql_real_escape_string($antwort), $fid);
 			$result = mysql_query($sql[$n]);
+			if(!$result) {
+				?>
+				<h3>Das SQL-Insert hat einen Fehler gemeldet.</h3>
+				<?php
+				print "<p>".$sql[$n]."</p>";
+
+				// Debug
+				foreach ($sql as $q) {
+					print $q."<br />";				
+				}
+			} 
 			$n++;
 		}
 	}	
-	// Debug
-	foreach ($sql as $q) {
-		print $q."<br />";
-	}
 	
 	// Nächste Frage...
 	include($_SERVER['DOCUMENT_ROOT'].'/pages/neuefrage.php'); 

@@ -47,12 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <div ID="Loginbox">
-	<h3>DEBUG:</h3>
-	<?php
-	echo "u: " . $username;
-	echo "p: " . $passwort;
-	echo "db: " . $pw[0];
-	?>
 	<h3>Verwaltung</h3>
 	<form role="form" action="/anmeldung" method="post">
 		<div class="form-group">
