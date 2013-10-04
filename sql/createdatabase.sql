@@ -10,7 +10,7 @@ drop table geantwortet;
 
 CREATE TABLE user (
   email VARCHAR(255) NOT NULL,
-  pw VARCHAR(32) NOT NULL,
+  pw CHAR(32) NOT NULL,
   create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`email`));
 
