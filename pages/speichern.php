@@ -14,17 +14,16 @@ if ($auth_angemeldet==FALSE) {
 	$antworten = $_REQUEST["awm"];
 	
 	//Verbindung zur DB
-	$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
+	$connection = @mysqli_connect($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
 
 	if ($connection == FALSE) {
 		echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
 		exit();
 	}
-	mysql_select_db("dba02");
-	mysql_set_charset("utf8");
+	$connection->set_charset("utf8");
 	
-	$sql[0] = sprintf("insert into frage (txt) value ('%s')", mysql_real_escape_string($fragetext));
-	$result = mysql_query($sql[0]);
+	$sql[0] = sprintf("insert into frage (txt) value ('%s')", $connection->real_escape_string($fragetext));
+	$result = $connection->query($sql[0]);
 	if(!$result) {
 		?>
 		<h3>Das SQL-Insert hat einen Fehler gemeldet.</h3>
@@ -36,11 +35,11 @@ if ($auth_angemeldet==FALSE) {
 		//	print "<p>"$q."</p>";
 		//}
 	} else {
-		$fid = mysql_insert_id();
+		$fid = $connection->insert_id;
 		$n=1;
 		foreach ($antworten as $antwort) {
-			$sql[$n]=sprintf("insert into antwort (txt, fid) values ('%s','%s')", mysql_real_escape_string($antwort), $fid);
-			$result = mysql_query($sql[$n]);
+			$sql[$n]=sprintf("insert into antwort (txt, fid) values ('%s','%s')", $connection->real_escape_string($antwort), $fid);
+			$result = $connection->query($sql[$n]);
 			if(!$result) {
 				?>
 				<h3>Das SQL-Insert hat einen Fehler gemeldet.</h3>
@@ -55,8 +54,8 @@ if ($auth_angemeldet==FALSE) {
 			$n++;
 		}
 	}	
-	
 	// Nächste Frage...
 	include($_SERVER['DOCUMENT_ROOT'].'/pages/neuefrage.php'); 
 }
+$connection->close();
 ?>
