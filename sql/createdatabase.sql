@@ -17,22 +17,23 @@ CREATE TABLE user (
 CREATE TABLE frage (
   fid INT NOT NULL AUTO_INCREMENT,
   txt VARCHAR(1024) NOT NULL,
-  PRIMARY KEY (`fid`));
+  CONSTRAINT pk_frage PRIMARY KEY (`fid`));
 
 CREATE TABLE antwort (
   aid INT NOT NULL AUTO_INCREMENT,
   nr  INT NULL,
   txt VARCHAR(1024) NOT NULL,
   fid INT NOT NULL,
-  PRIMARY KEY (`aid`),
-  FOREIGN KEY (`fid`) REFERENCES frage(`fid`));
+  CONSTRAINT pk_antwort PRIMARY KEY ('fid', 'aid'),
+  CONSTRAINT fk_antwort_frage_fid FOREIGN KEY ('fid') REFERENCES frage(`fid`));
 
 CREATE TABLE geantwortet (
   gid INT NOT NULL AUTO_INCREMENT,
   aid INT NOT NULL,
   zs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`gid`),
-  FOREIGN KEY (`aid`) REFERENCES antwort(`aid`));
+  CONSTRAINT pk_geantwortet PRIMARY KEY ('fid', 'aid', 'gid'),
+  CONSTRAINT fk_geantwortet_antwort_aid FOREIGN KEY ('fid','aid') REFERENCES antwort('fid','aid')),
+  CONSTRAINT fk_geantwortet_frage_fid FOREIGN KEY ('fid') REFERENCES antwort('fid'));
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
