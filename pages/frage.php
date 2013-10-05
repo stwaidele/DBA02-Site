@@ -1,25 +1,25 @@
 ﻿<?php 
 
 //Verbindung zur DB
-$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
+$connection = @mysqli_connect($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
 
 if ($connection == FALSE) {
 	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
 	exit();
 }
 
-mysql_select_db("dba02");
-mysql_set_charset("utf8");
+#mysqli_select_db("dba02");
+$connection->set_charset("utf8");
 
 //Erzeugung einer Zufallszahl zur Auswahl der Frage
-$result = mysql_query("Select * from frage");
-$anzahl = mysql_num_rows($result);
+$result = $connection->query("Select * from frage");
+$anzahl = $result->num_rows;
 $zufall = mt_rand(1, $anzahl);
-$frage = mysql_query ("Select txt from frage where fid=".$zufall);
-$auswahl = mysql_fetch_row($frage);
+$frage = $connection->query("Select txt from frage where fid=".$zufall);
+$auswahl = $frage->fetch_row();
 
-$abfrantw = mysql_query ("Select aid, txt from antwort where fid =".$zufall);
-$anzahlant = mysql_num_rows($abfrantw);
+$abfrantw = $connection->query("Select aid, txt from antwort where fid =".$zufall);
+$anzahlant = $abfrantw->num_rows;
 
 $daten = $zufall;
 ?>
@@ -31,7 +31,7 @@ $daten = $zufall;
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 <?php
 	for ($i = 1; $i <= $anzahlant; $i++) {
-			$antwortm = mysql_fetch_array($abfrantw, MYSQL_BOTH);
+			$antwortm = $abfrantw->fetch_array(MYSQL_BOTH);
 			//$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
 			printf("<div class=\"checkbox\">");
 				printf("<label>");
@@ -41,6 +41,7 @@ $daten = $zufall;
 			printf("</div>");
 	}
 ?>
+<h5>DEBUG: mysqli_</h5>
 
 		 
 
@@ -48,6 +49,6 @@ $daten = $zufall;
 		</form>
 	</div>
 <?php
-mysql_close($connection);
+$connection->close();
 ?>
 
