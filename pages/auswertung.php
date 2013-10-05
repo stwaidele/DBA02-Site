@@ -2,20 +2,35 @@
 $fid =$_POST['daten'];
 
 //Verbindung zur DB
-$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
+/*$connection = @mysql_connect("localhost", "root", "minou0104");
 if ($connection == FALSE) {
 	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
 	exit();
 }
-
 mysql_select_db("dba02");
 mysql_set_charset("utf8");
+*/
+$conn = new mysqli($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
+}
 
-$abfrage= mysql_query("Select txt from frage where fid=".$fid);
-$frage = mysql_fetch_row($abfrage);
+//$abfrage= mysql_query("Select txt from frage where fid=".$fid);
+//$frage = mysql_fetch_row($abfrage);
 
-$abfrantw = mysql_query ("Select txt, aid from antwort where fid =".$fid);
-$anzahlant = mysql_num_rows($abfrantw);
+$query = "Select txt from frage where fid=".$fid;
+$result = $conn->query($query);
+$frage = $result->fetch_row();
+
+
+
+
+//$abfrantw = mysql_query ("Select txt, aid, nr from antwort where fid =".$fid." order by nr asc");
+//$anzahlant = mysql_num_rows($abfrantw);
+$query = "Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
+$result = $conn->query($query);
+$anzahlant = $result->num_rows;
+
 
 for ($i=1; $i<=$anzahlant; $i++)
 {
@@ -23,13 +38,18 @@ for ($i=1; $i<=$anzahlant; $i++)
 	if (isset ($_POST[$chckbname]))
 	{
 		$chckbwert = $_POST[$chckbname];
-		mysql_query("INSERT INTO geantwortet(aid)VALUES('$chckbwert')");
+		$query = "INSERT INTO geantwortet(aid)VALUES('$chckbwert')";
+		$result = $conn->query($query);
+		//mysql_query("INSERT INTO geantwortet(aid)VALUES('$chckbwert')");
 	}
 }
 
-$abfrggesamtant = mysql_query("SELECT * FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid");
+	$query = "SELECT * FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid";
+	$result = $conn->query($query);
+	$gesamtsumme =$result->num_rows;
+//$abfrggesamtant = mysql_query("SELECT * FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid");
 
-$gesamtsumme = mysql_num_rows($abfrggesamtant);
+//$gesamtsumme = mysql_num_rows($abfrggesamtant);
 ?>
 
 <div>
@@ -37,13 +57,23 @@ $gesamtsumme = mysql_num_rows($abfrggesamtant);
 	<p>Vielen Dank für Ihre Antwort.</p>
 	<h3><?php echo $frage[0] ?></h3>
 <?php
+$query = "Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
+$result1 = $conn->query($query);
 	for ($i = 1; $i <= $anzahlant; $i++) {
-			$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
+	
+			
+			$antwortm = $result1->fetch_row();
+			//$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
 			echo $antwortm[0];
+			
 			$aid = $antwortm[1];
-			$abfrgeinzlantw = mysql_query("SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid);
-			$gesamtantm = mysql_num_rows($abfrgeinzlantw);
-
+			//$abfrgeinzlantw = mysql_query("SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid);
+			//$gesamtantm = mysql_num_rows($abfrgeinzlantw);
+			$query = "SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid;
+			$result = $conn->query($query);
+			$gesamtantm= $result->num_rows;
+			
+			
 			// US-Zahlenformat für Bootstrap
 			$rechnungUS = (100/$gesamtsumme)*$gesamtantm;
 			$rechnungUS = number_format($rechnungUS, 2,".",",");

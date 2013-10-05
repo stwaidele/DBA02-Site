@@ -1,25 +1,45 @@
 ﻿<?php 
 
-//Verbindung zur DB
-$connection = @mysqli_connect($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
+/*Verbindung zur DB
+ $connection = @mysqli_connect("localhost", "root", "minou0104");
 
 if ($connection == FALSE) {
 	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
 	exit();
+} */
+
+$conn = new mysqli($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
 }
 
-#mysqli_select_db("dba02");
-$connection->set_charset("utf8");
+
 
 //Erzeugung einer Zufallszahl zur Auswahl der Frage
-$result = $connection->query("Select * from frage");
-$anzahl = $result->num_rows;
-$zufall = mt_rand(1, $anzahl);
-$frage = $connection->query("Select txt from frage where fid=".$zufall);
-$auswahl = $frage->fetch_row();
 
-$abfrantw = $connection->query("Select aid, txt from antwort where fid =".$zufall);
-$anzahlant = $abfrantw->num_rows;
+$query = "Select count(*) from frage";
+$result = $conn->query($query);
+//$result = mysql_query("Select * from frage");
+
+$anzahl = $result->fetch_row();
+
+
+//$anzahl = mysql_num_rows($result);
+$zufall = mt_rand(1, $anzahl[0]);
+
+$query = "Select txt from frage where fid=".$zufall;
+$result = $conn->query($query);
+$auswahl = $result->fetch_row();
+echo $auswahl[0];
+//$frage = mysql_query ("Select txt from frage where fid=".$zufall);
+//$auswahl = mysql_fetch_row($frage);
+
+//Antworten holen
+$query = "Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc";
+$result = $conn->query($query);
+//$abfrantw = mysql_query ("Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc");
+//$anzahlant = mysql_num_rows($abfrantw);
+$anzahlant = $result ->num_rows;
 
 $daten = $zufall;
 ?>
@@ -31,8 +51,8 @@ $daten = $zufall;
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 <?php
 	for ($i = 1; $i <= $anzahlant; $i++) {
-			$antwortm = $abfrantw->fetch_array(MYSQL_BOTH);
-			//$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
+			//$antwortm = mysql_fetch_array($abfrantw, MYSQL_BOTH);
+			$antwortm = $result->fetch_array();
 			printf("<div class=\"checkbox\">");
 				printf("<label>");
 				printf("<input type=\"checkbox\" name=\"AID%d\" value=\"%s\">", $i, $antwortm[0]);
@@ -41,7 +61,6 @@ $daten = $zufall;
 			printf("</div>");
 	}
 ?>
-<h5>DEBUG: mysqli_</h5>
 
 		 
 
@@ -49,6 +68,7 @@ $daten = $zufall;
 		</form>
 	</div>
 <?php
-$connection->close();
+$conn->close();
+//mysql_close($connection);
 ?>
 
