@@ -14,16 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$path = "/neuefrage";
 
 	//Verbindung zur DB
-	$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
+	$connection = @mysqli_connect($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
 	if ($connection == FALSE) {
 		echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
 		exit();
 	}
-	mysql_select_db("dba02");
-	mysql_set_charset("utf8");
+	$connection->set_charset("utf8");
 
-	$abfrage = mysql_query("select pw from user where email = '".$username."';");
-	$pw = mysql_fetch_row($abfrage);
+	$abfrage = $connection->query("select pw from user where email = '".$username."';");
+	$pw = $abfrage->fetch_row();
 	
 	// Benutzername und Passwort werden überprüft
 	// $passwort darf nicht leer sein, da sonst unbekannte Nutzer (wegen leerer Ergebnismenge der Abfrage) angemeldet wären
