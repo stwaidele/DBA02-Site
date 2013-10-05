@@ -20,20 +20,21 @@ CREATE TABLE frage (
   CONSTRAINT pk_frage PRIMARY KEY (`fid`));
 
 CREATE TABLE antwort (
+  fid INT NOT NULL, 
   aid INT NOT NULL AUTO_INCREMENT,
   nr  INT NULL,
   txt VARCHAR(1024) NOT NULL,
-  fid INT NOT NULL,
-  CONSTRAINT pk_antwort PRIMARY KEY ('fid', 'aid'),
-  CONSTRAINT fk_antwort_frage_fid FOREIGN KEY ('fid') REFERENCES frage(`fid`));
+  CONSTRAINT pk_antwort PRIMARY KEY (fid, aid),
+  CONSTRAINT fk_antwort_frage_fid FOREIGN KEY (fid) REFERENCES frage(fid) ON UPDATE CASCADE ON DELETE CASCADE );
 
 CREATE TABLE geantwortet (
-  gid INT NOT NULL AUTO_INCREMENT,
+  fid INT NOT NULL,
   aid INT NOT NULL,
+  gid INT NOT NULL AUTO_INCREMENT,
   zs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT pk_geantwortet PRIMARY KEY ('fid', 'aid', 'gid'),
-  CONSTRAINT fk_geantwortet_antwort_aid FOREIGN KEY ('fid','aid') REFERENCES antwort('fid','aid')),
-  CONSTRAINT fk_geantwortet_frage_fid FOREIGN KEY ('fid') REFERENCES antwort('fid'));
+  CONSTRAINT pk_geantwortet PRIMARY KEY (fid, aid, gid),
+  CONSTRAINT fk_geantwortet_antwort_aid FOREIGN KEY (fid, aid) REFERENCES antwort(fid, aid) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_geantwortet_frage_fid FOREIGN KEY (fid) REFERENCES antwort(fid) ON UPDATE CASCADE ON DELETE CASCADE );
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
