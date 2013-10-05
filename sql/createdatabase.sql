@@ -33,8 +33,8 @@ CREATE TABLE geantwortet (
   gid INT NOT NULL AUTO_INCREMENT,
   zs TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT pk_geantwortet PRIMARY KEY (fid, aid, gid),
-  CONSTRAINT fk_geantwortet_antwort_aid FOREIGN KEY (fid, aid) REFERENCES antwort(fid, aid) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT fk_geantwortet_frage_fid FOREIGN KEY (fid) REFERENCES antwort(fid) ON UPDATE CASCADE ON DELETE CASCADE );
+  CONSTRAINT fk_geantwortet_antwort_aid FOREIGN KEY (fid, aid) REFERENCES antwort(fid, aid) ON UPDATE CASCADE ON DELETE CASCADE );
+
 
 # Zwei Admins
 # Durch die Kombination von username und passwort werden selbst bei gleichem Passwort unterschiedliche Hashes generiert
