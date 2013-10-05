@@ -28,6 +28,15 @@ select antwort.txt, count(geantwortet.aid)
 	from antwort, geantwortet 
 	where geantwortet.aid = antwort.aid and antwort.fid = 1 
 	group by geantwortet.aid;
+
+# Neue Frage Speichern
+insert into frage (txt) value ('%s');
+# FID der neuen Frage ermitteln
+$fid = mysql_insert_id();
+
+# Antwortmöglichkeiten speichern
+insert into antwort (txt, fid) values ('%s','%s');
+
 	
 # Die drei neusten Fragen
 # d.h. mit der höchsten FID
