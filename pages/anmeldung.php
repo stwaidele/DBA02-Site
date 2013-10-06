@@ -10,38 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$passwort = $_POST['passwort'];
 
 	$hostname = $_SERVER['HTTP_HOST'];
-	//      $path = dirname($_SERVER['PHP_SELF']);
 	$path = "/neuefrage";
-
-	//Verbindung zur DB
-	$connection = @mysqli_connect($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
-	if ($connection == FALSE) {
-		echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
-		exit();
-	}
-	$connection->set_charset("utf8");
-
-	$abfrage = $connection->query("select pw from user where email = '".$username."';");
-	$pw = $abfrage->fetch_row();
+	$ziel = 'http://'.$hostname.($path == '/' ? '' : $path);
 	
-	// Benutzername und Passwort werden überprüft
-	// $passwort darf nicht leer sein, da sonst unbekannte Nutzer (wegen leerer Ergebnismenge der Abfrage) angemeldet wären
-	if (($pw[0] == $passwort) && ($passwort!='')) {
-		$_SESSION['angemeldet'] = true;
-   
-		// Weiterleitung zur geschützten Startseite
-		if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.1') {
-			if (php_sapi_name() == 'cgi') {
-				header('Status: 303 See Other');
-			}
-			else {
-				header('HTTP/1.1 303 See Other');
-			}
-		}
-
-		header('Location: http://'.$hostname.($path == '/' ? '' : $path));
-		exit;
-	}
+	// Anmeldedaten prüfen und bei Berechtigung weiterleiten
+	$benutzer = new User($username, $passwort, $ziel);
+	
+	// Der Rest der Datei wird nur bei Anmeldefehlern erreicht:
 }
 ?>
 
