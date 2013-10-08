@@ -1,19 +1,25 @@
 <?php
-$connection = @mysql_connect($DBA02_host, $DBA02_user, $DBA02_pass);
-if ($connection == FALSE) {
-	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
-	exit();
-}
-mysql_select_db("dba02");
-mysql_set_charset("utf8");
+// Verbindung zur DB herstellen
+
+include_once($_SERVER['DOCUMENT_ROOT'].'/pages/mydb.php');
+$dbverbindung = new mydb();
 
 // Die 3 Fragen mit der höchsten FID
-$neuefragen = mysql_query("select * from frage order by fid desc limit 0,3");
-$anzahlneu = mysql_num_rows($neuefragen);
+
+$queryneuefrage = "select * from frage order by fid desc limit 0,3";
+$anzahlneu =$dbverbindung->queryanzahl($queryneuefrage);
+$neuefragen = $dbverbindung->query($queryneuefrage);
+
+
 
 // Die 3 beliebtesten Fragen
-$popfragen = mysql_query("SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;");
-$anzahlpop = mysql_num_rows($neuefragen);
+$querypopfragen = "SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;";
+$anzahlpop =$dbverbindung->queryanzahl($querypopfragen);
+$popfragen=$dbverbindung->query($querypopfragen);
+
+
+//$popfragen = mysql_query("SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;");
+//$anzahlpop = mysql_num_rows($neuefragen);
 
 ?>
 <div ID="popular">
@@ -21,8 +27,9 @@ $anzahlpop = mysql_num_rows($neuefragen);
 	<ul>
 		<?php
 		for ($i = 1; $i <= $anzahlpop; $i++) {
-			$popfrage = mysql_fetch_assoc($popfragen);
-			printf ('<li><a href="/frage/%s">%s</a></li>', $popfrage['fid'], $popfrage['txt']);
+			
+			$popfrage =$popfragen->fetch_array();
+			printf ('<li><a href="/frage/%s">%s</a></li>', $popfrage[1], $popfrage[2]);
 		} 
 		?>			
 	</ul>
@@ -32,8 +39,9 @@ $anzahlpop = mysql_num_rows($neuefragen);
 	<ul>
 		<?php
 		for ($i = 1; $i <= $anzahlneu; $i++) {
-			$neuefrage = mysql_fetch_assoc($neuefragen);
-			printf ('<li><a href="/frage/%s">%s</a></li>', $neuefrage['fid'], $neuefrage['txt']);
+			
+			$neuefrage = $neuefragen->fetch_array();
+			printf ('<li><a href="/frage/%s">%s</a></li>', $neuefrage[0], $neuefrage[1]);
 		} 
 		?>			
 	</ul>

@@ -1,58 +1,45 @@
 ﻿<?php 
 
-/*Verbindung zur DB
- $connection = @mysqli_connect("localhost", "root", "minou0104");
+// Verbindung zur DB herstellen
 
-if ($connection == FALSE) {
-	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
-	exit();
-} */
+include_once 'mydb.php';
 
-$conn = new mysqli($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
-if ($conn->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
-}
-
-
+$dbverbindung = new mydb();
 
 //Erzeugung einer Zufallszahl zur Auswahl der Frage
+$queryanzahl = "Select count(*) from frage";
+$anzahl =$dbverbindung->querysingle($queryanzahl);
 
-$query = "Select count(*) from frage";
-$result = $conn->query($query);
-//$result = mysql_query("Select * from frage");
+$zufall = mt_rand(1, $anzahl);
 
-$anzahl = $result->fetch_row();
+//Frage anhand Zufallszahl auswählen
+$queryfrage = "Select txt from frage where fid=".$zufall;
+$auswahl =$dbverbindung->querysingle($queryfrage);
 
 
-//$anzahl = mysql_num_rows($result);
-$zufall = mt_rand(1, $anzahl[0]);
+//Gesamtanzahl der Antwortmöglichkeiten holen
 
-$query = "Select txt from frage where fid=".$zufall;
-$result = $conn->query($query);
-$auswahl = $result->fetch_row();
-echo $auswahl[0];
-//$frage = mysql_query ("Select txt from frage where fid=".$zufall);
-//$auswahl = mysql_fetch_row($frage);
-
-//Antworten holen
-$query = "Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc";
-$result = $conn->query($query);
-//$abfrantw = mysql_query ("Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc");
-//$anzahlant = mysql_num_rows($abfrantw);
-$anzahlant = $result ->num_rows;
-
+$queryantwortges ="Select count(*) from antwort where fid =".$zufall;
+$anzahlant =$dbverbindung->querysingle($queryantwortges);
 $daten = $zufall;
-?>
 
+?>
+<!-- Antworten anzeigen -->
 <div ID="frage">
 	<h2>Bitte beantworten Sie folgende Frage:</h3>
-		<h3><?php echo $auswahl[0] ?></h3>
+		<h3><?php echo $auswahl ?></h3>
 		<form role="form" action="/index.php?show=auswertung" method ="post">
 		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
 <?php
+$queryantwortm = "Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc";
+$result =$dbverbindung->query($queryantwortm);
+
+//Schleife durch Antwortmöglichkeiten
+
 	for ($i = 1; $i <= $anzahlant; $i++) {
-			//$antwortm = mysql_fetch_array($abfrantw, MYSQL_BOTH);
+			
 			$antwortm = $result->fetch_array();
+			
 			printf("<div class=\"checkbox\">");
 				printf("<label>");
 				printf("<input type=\"checkbox\" name=\"AID%d\" value=\"%s\">", $i, $antwortm[0]);
@@ -68,7 +55,7 @@ $daten = $zufall;
 		</form>
 	</div>
 <?php
-$conn->close();
-//mysql_close($connection);
+$dbverbindung->close();
+
 ?>
 

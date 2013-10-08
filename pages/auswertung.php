@@ -1,77 +1,74 @@
 <?php
+
 $fid =$_POST['daten'];
 
-//Verbindung zur DB
-/*$connection = @mysql_connect("localhost", "root", "minou0104");
-if ($connection == FALSE) {
-	echo "Bitte entschuldigen Sie, es ist ein technischer Fehler aufgetreten. Bitte wenden Sie sich an den Support";
-	exit();
-}
-mysql_select_db("dba02");
-mysql_set_charset("utf8");
-*/
-$conn = new mysqli($DBA02_host, $DBA02_user, $DBA02_pass, $DBA02_db);
-if ($conn->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
-}
+// Verbindung zur DB herstellen
 
-//$abfrage= mysql_query("Select txt from frage where fid=".$fid);
-//$frage = mysql_fetch_row($abfrage);
+include_once 'mydb.php';
+$dbverbindung = new mydb();
 
-$query = "Select txt from frage where fid=".$fid;
-$result = $conn->query($query);
-$frage = $result->fetch_row();
+//Frage aus DB holen
+$queryfrage = "Select txt from frage where fid=".$fid;
+$frage =$dbverbindung->querysingle($queryfrage);
+
+//Gesamtanzahl der Antwortmöglichkeiten holen
+
+$queryantwortges ="Select count(*) from antwort where fid =".$fid;
+$anzahlant =$dbverbindung->querysingle($queryantwortges);
 
 
+//Überprüfung welche Checkboxen gewählt wurden
 
-
-//$abfrantw = mysql_query ("Select txt, aid, nr from antwort where fid =".$fid." order by nr asc");
-//$anzahlant = mysql_num_rows($abfrantw);
-$query = "Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
-$result = $conn->query($query);
-$anzahlant = $result->num_rows;
-
-
+$gecheckt =0;
 for ($i=1; $i<=$anzahlant; $i++)
 {
 	$chckbname = "AID".$i;
 	if (isset ($_POST[$chckbname]))
 	{
 		$chckbwert = $_POST[$chckbname];
-		$query = "INSERT INTO geantwortet(aid)VALUES('$chckbwert')";
-		$result = $conn->query($query);
-		//mysql_query("INSERT INTO geantwortet(aid)VALUES('$chckbwert')");
+		$insertquery = "INSERT INTO geantwortet(aid, fid)VALUES('$chckbwert', $fid)";
+		$execute = $dbverbindung->query($insertquery);
+		$gecheckt++;
 	}
 }
 
-	$query = "SELECT * FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid";
-	$result = $conn->query($query);
-	$gesamtsumme =$result->num_rows;
-//$abfrggesamtant = mysql_query("SELECT * FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid");
+	//Wenn keine Antwort gewählt wurde
+	if($gecheckt==0)
+	{
+	printf("<h2>Es wurde keine Antwort ausgewählt!</h2>");
+	printf("<a class=\"btn btn-default\" href=\"/frage\">Zurück zur Frageseite</a>");
+	exit();
+	
+	
+	}
+	
+	//Gesamtsumme der gegebenen Antworten ermitteln für spätere Berechnung
+	$querygesamt = "SELECT count(*) FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid";
+	$gesamtsumme =$dbverbindung->querysingle($querygesamt);
 
-//$gesamtsumme = mysql_num_rows($abfrggesamtant);
+
 ?>
 
 <div>
 	<h2>Auswertung</h2>
 	<p>Vielen Dank für Ihre Antwort.</p>
-	<h3><?php echo $frage[0] ?></h3>
+	<h3><?php echo $frage ?></h3>
 <?php
-$query = "Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
-$result1 = $conn->query($query);
+//Antwortmöglichkeiten aus DB holen
+$queryeinzel ="Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
+$einzel =$dbverbindung->query($queryeinzel);
+
 	for ($i = 1; $i <= $anzahlant; $i++) {
 	
 			
-			$antwortm = $result1->fetch_row();
-			//$antwortm = mysql_fetch_row($abfrantw, MYSQL_BOTH);
+			$antwortm = $einzel->fetch_row();
 			echo $antwortm[0];
-			
+					
 			$aid = $antwortm[1];
-			//$abfrgeinzlantw = mysql_query("SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid);
-			//$gesamtantm = mysql_num_rows($abfrgeinzlantw);
-			$query = "SELECT * FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid;
-			$result = $conn->query($query);
-			$gesamtantm= $result->num_rows;
+			
+			//Anzahl der Antworten auf 1 Frage bezogen
+			$queryauswertung = "SELECT count(*) FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid;
+			$gesamtantm= $dbverbindung->querysingle($queryauswertung);
 			
 			
 			// US-Zahlenformat für Bootstrap
@@ -94,8 +91,9 @@ $result1 = $conn->query($query);
 		printf("</div>");
 	printf("</div>");
 }
-
+$dbverbindung->close();
 ?>
 </div>
-<a class="btn btn-default" href="/frage/2001">Nächste Frage</a>
+<a class="btn btn-default" href="/frage">Nächste Frage</a>
+
 
