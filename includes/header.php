@@ -1,19 +1,9 @@
 <?php
-     session_start();
+	// Sessionverwaltung
+	$benutzer = User::getInstance(NULL);
 
      $hostname = $_SERVER['HTTP_HOST'];
      $path = dirname($_SERVER['PHP_SELF']);
-
-	 $benutzer = User::Getinstance($_SESSION['angemeldet']);
-
-	 echo "DEBUG: header - ".$_SESSION['angemeldet'];	
-	 
-	 if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
-		 $benutzer->setAngemeldet=FALSE;
-	 } else {
-	 	$benutzer->setAngemeldet=TRUE;
-		echo "DEBUG: angemeldet";
-	}
 ?>
 <!DOCTYPE html>
 <html>

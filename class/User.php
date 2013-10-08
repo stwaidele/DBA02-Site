@@ -5,15 +5,18 @@ class User {
 	// Designpattern: Singleton
 	// http://www.phpbar.de/w/Singleton
 	static private $instance = null;
-	static public function getInstance($a = NULL) {
+	static public function getInstance() {
 		if (null === self::$instance) {
 			self::$instance = new self;
 		}
+        session_start();
 
-		echo "DEBUG: $a";	
-		// Sessionverwaltung
-		$angemeldet=$a;
-
+   	 if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
+   		 angemeldet=FALSE;
+   	 } else {
+   	 		angemeldet=TRUE;
+   		echo "DEBUG: angemeldet";
+   	}
 		return self::$instance;
 	}
 
@@ -22,7 +25,7 @@ class User {
 	// Ende: Designpattern Singleton
 	//
 
-	private $angemeldet = NULL;
+	static private $angemeldet = NULL;
 	public function getAngemeldet() { 
 		return $this->angemeldet;
 	}
