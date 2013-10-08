@@ -1,5 +1,5 @@
 <?php
-if ($benutzer->getAngemeldet()==FALSE) {
+if ($auth_angemeldet==FALSE) {
 	?>
 	<p>Nur angemeldete Benutzer können neue Fragen stellen.</p>
 	<p>Warum Sie zwischen Frage-Eingabe und Speicherung nicht mehr angemeldet sind? Keine Ahnung. Das sollte eigentlich nicht passieren.</p>

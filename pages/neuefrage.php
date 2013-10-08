@@ -1,6 +1,5 @@
 <?php
-
-if ($benutzer->getAngemeldet()==FALSE) {
+if ($auth_angemeldet==FALSE) {
 	?>
 	<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/anmeldung">Zur Anmeldeseite...</a></p>
 	<?php

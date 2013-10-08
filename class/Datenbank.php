@@ -17,6 +17,7 @@ class Datenbank {
 							.";charset=".$ini['DBA02_charset'], 
 							$ini['DBA02_user'], 
 							$ini['DBA02_pass']);
+			echo "__construct -> Datenbank";
 		} catch (PDOException $e) {
 			print "Error: " . $e->getMessage() . "<br/>";
 			die();
