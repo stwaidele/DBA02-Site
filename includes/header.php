@@ -4,10 +4,15 @@
      $hostname = $_SERVER['HTTP_HOST'];
      $path = dirname($_SERVER['PHP_SELF']);
 
+	 $benutzer = User::Getinstance($_SESSION['angemeldet']);
+
+	 echo "DEBUG: header - ".$_SESSION['angemeldet'];	
+	 
 	 if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
-		 $auth_angemeldet=FALSE;
+		 $benutzer->setAngemeldet=FALSE;
 	 } else {
-	 	$auth_angemeldet=TRUE;
+	 	$benutzer->setAngemeldet=TRUE;
+		echo "DEBUG: angemeldet";
 	}
 ?>
 <!DOCTYPE html>

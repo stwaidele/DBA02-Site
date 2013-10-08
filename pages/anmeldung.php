@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$ziel = 'http://'.$hostname.($path == '/' ? '' : $path);
 	
 	// Anmeldedaten prüfen und bei Berechtigung weiterleiten
-	$benutzer = new User($username, $passwort, $ziel);
+	$benutzer = User::getInstance(NULL);
+	$benutzer->auth($username, $passwort, $ziel);
 	
 	// Der Rest der Datei wird nur bei Anmeldefehlern erreicht:
 }
