@@ -1,6 +1,6 @@
 <?php 
 
-class User extends Datenbank {
+class User {
 	private $berechtigt = FALSE;
 	public function istberechtigt() { 
 		return $berechtigt;
@@ -20,18 +20,11 @@ class User extends Datenbank {
 	}
 	
 	public function __construct($u, $p, $url=NULL){
-		// Datenbankverbindung in der Elternklasse
-		parent::__construct();
-		echo "__construct -> User $DEBUG";
-		// Passwort aus der Datenbank holen
-		$stmt = $this->dbh->prepare("select pw from user where email = :u" );
-		$stmt->bindParam(':u', $u);
-		$stmt->execute();
-		$result = $stmt->fetch(PDO::FETCH_OBJ);
-		
+		$sql = new SQL();
+		$pw = $sql->getPasswort($u);
 		// Benutzername und Passwort werden überprüft
 		// $passwort darf nicht leer sein, da sonst unbekannte Nutzer (wegen leerer Ergebnismenge der Abfrage) angemeldet wären
-		if (($result->pw == $p) && ($result->pw != '')) {
+		if (($pw == $p) && ($pw != '')) {
 			$this->berechtigt = TRUE;
 			if ($url!=NULL) {
 				$_SESSION['angemeldet'] = true;
@@ -39,12 +32,9 @@ class User extends Datenbank {
 				$this->weiterleiten($url);
 			}
 		} else {
-			$berechtigt = FALSE;
+			$this->berechtigt = FALSE;
 		}
 		
-	}
-	public function __destruct(){
-		parent::__destruct();
 	}
 }	
 ?>
