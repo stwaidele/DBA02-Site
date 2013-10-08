@@ -44,10 +44,8 @@ class User {
 
 		if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
 			$this->setAngemeldet(FALSE);
-			echo "Wir sind nicht angemeldet";
 		} else {
 			$this->setAngemeldet(TRUE);
-			echo "Wir sind angemeldet";
 		}	
 	}
 }	
