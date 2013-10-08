@@ -1,17 +1,16 @@
-RewriteEngine on
-RewriteRule ^\.htaccess$ - [F]
-RewriteBase /
+#RewriteEngine on
+#RewriteRule ^\.htaccess$ - [F]
+#RewriteBase /
 
-# Hauptseite "http://dba02.10100.de" bzw. "/"
-RewriteRule ^$ /index.php?show=frage
+## Hauptseite "http://dba02.10100.de" bzw. "/"
+#RewriteRule ^$ /index.php?show=frage
 
-# Fragen & Auswertungen
-RewriteRule ^frage/([-0-9a-z]+)$ /index.php?show=frage&fid=$1
-RewriteRule ^auswertung/([-0-9a-z]+)$ /index.php?show=auswertung&fid=$1
+## Fragen & Auswertungen
+#RewriteRule ^frage/([-0-9a-z]+)$ /index.php?show=frage&fid=$1
+#RewriteRule ^auswertung/([-0-9a-z]+)$ /index.php?show=auswertung&fid=$1
 
-# Anmeldung
-RewriteRule ^anmeldung$ /index.php?show=anmeldung
+## Anmeldung
+#RewriteRule ^anmeldung$ /index.php?show=anmeldung
 
-
-# Sonstige Seiten
-RewriteRule ^([-0-9a-z]*)$ /index.php?show=$1
+## Sonstige Seiten
+#RewriteRule ^([-0-9a-z]*)$ /index.php?show=$1

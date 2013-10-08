@@ -3,7 +3,7 @@ session_start();
 session_destroy();
 
 $hostname = $_SERVER['HTTP_HOST'];
-$path = "/";
+$path = "/index.php?show=frage";
 
 // Weiterleitung zur Startseite
 if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.1') {

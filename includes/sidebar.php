@@ -20,7 +20,7 @@ $popfragen=$dbverbindung->query($querypopfragen);
 		for ($i = 1; $i <= $anzahlpop; $i++) {
 			
 			$popfrage =$popfragen->fetch_array();
-			printf ('<li><a href="/frage/%s">%s</a></li>', $popfrage[1], $popfrage[2]);
+			printf ('<li><a href="/index.php?show=frage&fid=%s">%s</a></li>', $popfrage[1], $popfrage[2]);
 		} 
 		?>			
 	</ul>
@@ -32,7 +32,7 @@ $popfragen=$dbverbindung->query($querypopfragen);
 		for ($i = 1; $i <= $anzahlneu; $i++) {
 			
 			$neuefrage = $neuefragen->fetch_array();
-			printf ('<li><a href="/frage/%s">%s</a></li>', $neuefrage[0], $neuefrage[1]);
+			printf ('<li><a href="/index.php?frage&fid=%s">%s</a></li>', $neuefrage[0], $neuefrage[1]);
 		} 
 		?>			
 	</ul>
@@ -42,10 +42,10 @@ $popfragen=$dbverbindung->query($querypopfragen);
 	<?php
 	if (!$user->getAngemeldet()) {
 		?>
-		<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/anmeldung">Zur Anmeldeseite...</a></p>
+		<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/index.php?show=anmeldung">Zur Anmeldeseite...</a></p>
 		<?php
 	} else {?>
-		<p><a href="/neuefrage">Stellen Sie eine neue Frage</a></p>
-		<p><a href="/abmeldung">Abmelden</a></p>
+		<p><a href="/index.php?show=neuefrage">Stellen Sie eine neue Frage</a></p>
+		<p><a href="/index.php?show=abmeldung">Abmelden</a></p>
 		<?php } ?>
 	</div>

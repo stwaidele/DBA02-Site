@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$passwort = $_POST['passwort'];
 
 	$hostname = $_SERVER['HTTP_HOST'];
-	$path = "/neuefrage";
+	$path = "/index.php?show=neuefrage";
 	$ziel = 'http://'.$hostname.($path == '/' ? '' : $path);
 
 	// Anmeldedaten prüfen und bei Berechtigung weiterleiten
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div ID="Loginbox">
 	<h3>Verwaltung</h3>
-	<form role="form" action="/anmeldung" method="post">
+	<form role="form" action="/index.php?show=anmeldung" method="post">
 		<div class="form-group">
 			<label for="benutzername">Benutzername</label>
 			<input type="email" class="form-control" name="benutzername" id="benutzername" placeholder="Benutzername oder E-Mail Adresse eingeben">

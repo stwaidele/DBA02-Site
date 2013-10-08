@@ -6,7 +6,7 @@ if ($user->getAngemeldet()==FALSE) {
 } else {?>
 	<div ID="NewQuestion">
 		<h3>Bitte geben Sie Ihre neue Frage ein:</h3>
-		<form role="form" action="/speichern" method="post">
+		<form role="form" action="/index.php?show=speichern" method="post">
 			<div class="form-group">
 				<label for="frage">Fragetext</label>
 				<input type="text" class="form-control" id="frage" name="frage" placeholder="Wie lautet Ihre neue Frage?">
