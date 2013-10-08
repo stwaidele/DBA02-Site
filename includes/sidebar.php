@@ -41,7 +41,7 @@ $anzahlpop = mysql_num_rows($neuefragen);
 <div ID="more">
 	<h3>Fragen stellen</h3>
 	<?php
-	if ($auth_angemeldet==FALSE) {
+	if (!$user->getAngemeldet()) {
 		?>
 		<p>Nur angemeldete Benutzer können neue Fragen stellen. <a href="/anmeldung">Zur Anmeldeseite...</a></p>
 		<?php

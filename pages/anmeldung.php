@@ -1,20 +1,15 @@
 <?php
 // http://aktuell.de.selfhtml.org/artikel/php/loginsystem/
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	// /include/header.php öffnet die Session bereits, 
-	// daher muss vor dem Anmelden die alte Session zerstört werden
-	session_destroy();
-	session_start();
-
 	$username = $_POST['benutzername'];
 	$passwort = $_POST['passwort'];
 
 	$hostname = $_SERVER['HTTP_HOST'];
 	$path = "/neuefrage";
 	$ziel = 'http://'.$hostname.($path == '/' ? '' : $path);
-	
+
 	// Anmeldedaten prüfen und bei Berechtigung weiterleiten
-	$benutzer = new User($username, $passwort, $ziel);
+	$user->auth($username, $passwort, $ziel);
 	
 	// Der Rest der Datei wird nur bei Anmeldefehlern erreicht:
 }

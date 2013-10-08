@@ -1,14 +1,9 @@
 <?php
-     session_start();
+	$user = new User; 
 
-     $hostname = $_SERVER['HTTP_HOST'];
-     $path = dirname($_SERVER['PHP_SELF']);
+    $hostname = $_SERVER['HTTP_HOST'];
+    $path = dirname($_SERVER['PHP_SELF']);
 
-	 if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
-		 $auth_angemeldet=FALSE;
-	 } else {
-	 	$auth_angemeldet=TRUE;
-	}
 ?>
 <!DOCTYPE html>
 <html>

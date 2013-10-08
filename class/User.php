@@ -1,9 +1,12 @@
 <?php 
 
 class User {
-	private $berechtigt = FALSE;
-	public function istberechtigt() { 
-		return $berechtigt;
+	// private $angemeldet;
+	public function getAngemeldet() { 
+		return $_SESSION['angemeldet'];
+	}
+	public function setAngemeldet($a) { 
+		$_SESSION['angemeldet'] = $a;
 	}
 	
 	public function weiterleiten($url){
@@ -19,22 +22,33 @@ class User {
 		exit;		
 	}
 	
-	public function __construct($u, $p, $url=NULL){
+	public function auth($u, $p, $url=NULL) {
 		$sql = new SQL();
 		$pw = $sql->getPasswort($u);
 		// Benutzername und Passwort werden überprüft
 		// $passwort darf nicht leer sein, da sonst unbekannte Nutzer (wegen leerer Ergebnismenge der Abfrage) angemeldet wären
 		if (($pw == $p) && ($pw != '')) {
-			$this->berechtigt = TRUE;
+			$this->setAngemeldet(TRUE);
 			if ($url!=NULL) {
-				$_SESSION['angemeldet'] = true;
+				$_SESSION['angemeldet'] = TRUE;
 				$_SESSION['benutzer'] = $u;
 				$this->weiterleiten($url);
 			}
 		} else {
-			$this->berechtigt = FALSE;
+			$this->setAngemeldet(FALSE);
 		}
-		
+	}
+	
+	public function __construct(){
+		session_start();
+
+		if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
+			$this->setAngemeldet(FALSE);
+			echo "Wir sind nicht angemeldet";
+		} else {
+			$this->setAngemeldet(TRUE);
+			echo "Wir sind angemeldet";
+		}	
 	}
 }	
 ?>
