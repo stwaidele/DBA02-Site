@@ -1,10 +1,7 @@
 <?php 
-include($_SERVER['DOCUMENT_ROOT'].'/includes/dbconf.php'); 
-
 class Datenbank {
 	//PDO - Datenbankhandler
 	protected $dbh;
-	public $DEBUG = "public";
 	
 	public function __construct(){
 		// Details zum Verbindungsaufbau sind in der INI-Datei gespeichert
@@ -30,6 +27,4 @@ class Datenbank {
 		print "Warning: Ignoring call to Datenbank::close(). The database connection will be closed in the destructor.";
 	}
 }	
-
-
 ?>

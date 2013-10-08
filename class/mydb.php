@@ -4,12 +4,12 @@ class mydb {
   protected $mysqli;
   
   // constructor
-
   function __construct() 
     {
 
-	$ini_array = parse_ini_file("data.ini");
-	$this->mysqli = @new mysqli($ini_array['server'], $ini_array['user'], $ini_array['pw'], $ini_array['db']);
+	$ini_array = parse_ini_file($_SERVER['DOCUMENT_ROOT'].'/includes/dbconf.ini');
+	$this->mysqli = @new mysqli($ini_array['DBA02_host'], $ini_array['DBA02_user'], $ini_array['DBA02_pass'], $ini_array['DBA02_db']);
+	$this->mysqli->set_charset($ini_array['DBA02_charset']);
 	// testen, ob Verbindung OK
 	
     if(mysqli_connect_errno())

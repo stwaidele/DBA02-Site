@@ -1,9 +1,6 @@
 ﻿<?php 
 
 // Verbindung zur DB herstellen
-
-include_once 'mydb.php';
-
 $dbverbindung = new mydb();
 
 //Erzeugung einer Zufallszahl zur Auswahl der Frage

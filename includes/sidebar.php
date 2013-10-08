@@ -1,25 +1,16 @@
 <?php
 // Verbindung zur DB herstellen
-
-include_once($_SERVER['DOCUMENT_ROOT'].'/pages/mydb.php');
 $dbverbindung = new mydb();
 
 // Die 3 Fragen mit der höchsten FID
-
 $queryneuefrage = "select * from frage order by fid desc limit 0,3";
 $anzahlneu =$dbverbindung->queryanzahl($queryneuefrage);
 $neuefragen = $dbverbindung->query($queryneuefrage);
-
-
 
 // Die 3 beliebtesten Fragen
 $querypopfragen = "SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;";
 $anzahlpop =$dbverbindung->queryanzahl($querypopfragen);
 $popfragen=$dbverbindung->query($querypopfragen);
-
-
-//$popfragen = mysql_query("SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;");
-//$anzahlpop = mysql_num_rows($neuefragen);
 
 ?>
 <div ID="popular">

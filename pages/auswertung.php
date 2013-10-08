@@ -3,8 +3,6 @@
 $fid =$_POST['daten'];
 
 // Verbindung zur DB herstellen
-
-include_once 'mydb.php';
 $dbverbindung = new mydb();
 
 //Frage aus DB holen
