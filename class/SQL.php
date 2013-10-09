@@ -8,17 +8,67 @@ class SQL extends Datenbank {
 		parent::__destruct();
 	}
 	
-	public function getPasswort($u) {
-		// Passwort aus der Datenbank holen
-		$stmt = $this->dbh->prepare("select pw from user where email = :u" );
-		$stmt->bindParam(':u', $u);
-		$stmt->execute();
-		$result = $stmt->fetch(PDO::FETCH_OBJ);
-		return $result->pw;
+	public function getAnzahlFragen() {
+		# Die Anzahl der zur Verfügung stehenden Fragen
+		# (Wird für die Auswahl einer zufälligen Frage benötigt) 
+		# (-> wird im Moment gar nicht benötigt)
+		try {
+			$stmt = $this->dbh->prepare("select count(*) as anz from frage");
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_OBJ);
+			return $result->anz;			
+		} catch(PDOExecption $e) { 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		}
 	}
-	public function setNeueFrage($fragetext, $antworten) {
-		// TODO: Transaction start / Error handling
+	
+	public function getFrageText($f) {
+		# Der Text von Frage f:
+		# (Wird für die Abfrage und die Auswertung benötigt) 
+		try {
+			$stmt = $this->dbh->prepare("select txt from frage where fid = :f");
+			$stmt->bindParam(':f', $f);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_OBJ);
+			return $result->txt;			
+		} catch(PDOExecption $e) { 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 	
+	}
 
+	public function getAntwortmoeglichkeiten($f) {
+		# Listet alle Antwortmöglichkeiten von Frage f auf:
+		# (Wird für die Abfrage benötigt)
+		try {			
+			$stmt = $this->dbh->prepare("select aid,txt from antwort where fid = :f order by nr" );
+			$stmt->bindParam(':f', $f);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+			return $result;
+		}
+		catch(PDOExecption $e) { 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
+	}
+	
+	public function getPasswort($u) {
+		try {
+			// Passwort aus der Datenbank holen
+			$stmt = $this->dbh->prepare("select pw from user where email = :u" );
+			$stmt->bindParam(':u', $u);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_OBJ);
+			return $result->pw;
+		} catch(PDOExecption $e) { 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 
+	}
+	
+	public function setNeueFrage($fragetext, $antworten) {
 		try {
 			// Fragetext und alle Antworten werden in einer Transaktion gespeichert
 			// -> Entweder alle oder gar nichts
@@ -42,9 +92,9 @@ class SQL extends Datenbank {
 			}	
 			$this->dbh->commit();
 		} catch(PDOExecption $e) { 
-        	$this->dbh->rollback(); 
-        	print "Error!: " . $e->getMessage() . "</br>"; 
-    	} 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 
 	}	
 }
 ?>

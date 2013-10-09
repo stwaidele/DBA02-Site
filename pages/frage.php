@@ -1,58 +1,41 @@
 ﻿<?php 
-
 // Verbindung zur DB herstellen
-$dbverbindung = new mydb();
+$sql = new SQL;
 
-//Erzeugung einer Zufallszahl zur Auswahl der Frage
-$queryanzahl = "Select count(*) from frage";
-$anzahl =$dbverbindung->querysingle($queryanzahl);
+// FID aus der URL lesen bzw. zufällig bestimmen
+$f = $_GET["fid"];
+/* 
+	if ($f="zufall") {
+	//Erzeugung einer Zufallszahl zur Auswahl der Frage
+	$f = mt_rand(1, $sql->getAnzahlFragen());
+}
+*/
 
-$zufall = mt_rand(1, $anzahl);
-
-//Frage anhand Zufallszahl auswählen
-$queryfrage = "Select txt from frage where fid=".$zufall;
-$auswahl =$dbverbindung->querysingle($queryfrage);
-
-
-//Gesamtanzahl der Antwortmöglichkeiten holen
-
-$queryantwortges ="Select count(*) from antwort where fid =".$zufall;
-$anzahlant =$dbverbindung->querysingle($queryantwortges);
-$daten = $zufall;
-
+// Fragetext und Antwortmöglichkeiten aus der Datenbank lesen
+$fragetext = $sql->getFrageText($f);
+$antwortmoeglichkeiten = $sql->getAntwortmoeglichkeiten($f);
 ?>
+
 <!-- Antworten anzeigen -->
 <div ID="frage">
 	<h2>Bitte beantworten Sie folgende Frage:</h3>
-		<h3><?php echo $auswahl ?></h3>
-		<form role="form" action="/index.php?show=auswertung" method ="post">
-		<input type="hidden" name="daten" value="<?php echo $daten; ?>" />
+		<h3><?php echo $fragetext ?></h3>
+		<form role="form" action="/index.php?show=auswertung" method ="get">
+			<input type="hidden" name="show" value="auswertung" />
+			<input type="hidden" name="fid" value="<?php echo $f; ?>" />
 <?php
-$queryantwortm = "Select aid, txt, nr from antwort where fid =".$zufall." order by nr asc";
-$result =$dbverbindung->query($queryantwortm);
-
-//Schleife durch Antwortmöglichkeiten
-
-	for ($i = 1; $i <= $anzahlant; $i++) {
-			
-			$antwortm = $result->fetch_array();
-			
-			printf("<div class=\"checkbox\">");
-				printf("<label>");
-				printf("<input type=\"checkbox\" name=\"AID%d\" value=\"%s\">", $i, $antwortm[0]);
-				echo $antwortm[1];
-			printf("</label>");
-			printf("</div>");
-	}
+	//Schleife durch Antwortmöglichkeiten
+	$i = 0;
+	foreach ($antwortmoeglichkeiten as $awm) {
 ?>
-
-		 
-
+        <div class="checkbox">
+          <label>
+			  <?php printf('<input type="checkbox" name="AID-%s">%s', $awm['aid'], $awm['txt']); ?>
+          </label>
+        </div> 
+<?php
+	} 
+?>
 			<button type="submit" class="btn btn-default">Antworten & sehen, was andere geantwortet haben</button>
 		</form>
 	</div>
-<?php
-$dbverbindung->close();
-
-?>
-
