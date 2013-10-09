@@ -1,11 +1,33 @@
 <?php 
 
 class User {
-	// private $angemeldet;
+	// Singleton Entwurfsmuster: Nur ein Benutzer pro Session
+	static private $instance = null;
+	static public function getInstance()
+	{
+		if (null === self::$instance) {
+			self::$instance = new self;
+			session_start();
+
+			if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
+				self::setAngemeldet(FALSE);
+			} else {
+				self::setAngemeldet(TRUE);
+			}	
+		}
+		return self::$instance;
+	}
+ 
+	private function __construct(){
+	}
+	private function __clone(){
+	}
+	
 	public function getAngemeldet() { 
 		return $_SESSION['angemeldet'];
 	}
-	public function setAngemeldet($a) { 
+
+	static private function setAngemeldet($a) { 
 		$_SESSION['angemeldet'] = $a;
 	}
 	
@@ -45,16 +67,6 @@ class User {
 		if ($url!=NULL) {
 			$this->weiterleiten($url);
 		}
-	}
-	
-	public function __construct(){
-		session_start();
-
-		if (!isset($_SESSION['angemeldet']) || !$_SESSION['angemeldet']) {
-			$this->setAngemeldet(FALSE);
-		} else {
-			$this->setAngemeldet(TRUE);
-		}	
 	}
 }	
 ?>

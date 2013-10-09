@@ -1,6 +1,6 @@
 <?php
 // Sessionverwaltung ist in die Klasse User integriert
-$user = new User; 
+$user = User::getInstance(); 
 ?>
 <!DOCTYPE html>
 <html>
