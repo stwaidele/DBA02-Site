@@ -30,68 +30,62 @@ for ($i=1; $i<=$anzahlant; $i++)
 	}
 }
 
-	//Wenn keine Antwort gewählt wurde
-	if($gecheckt==0)
-	{
+//Wenn keine Antwort gewählt wurde
+if($gecheckt==0)
+{
 	printf("<h2>Es wurde keine Antwort ausgewählt!</h2>");
-	printf("<a class=\"btn btn-default\" href=\"/frage\">Zurück zur Frageseite</a>");
+	printf("<a class=\"btn btn-default\" href=\"/index.php?show=frage\">Zurück zur Frageseite</a>");
 	exit();
+}
 	
-	
-	}
-	
-	//Gesamtsumme der gegebenen Antworten ermitteln für spätere Berechnung
-	$querygesamt = "SELECT count(*) FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid";
-	$gesamtsumme =$dbverbindung->querysingle($querygesamt);
-
-
+//Gesamtsumme der gegebenen Antworten ermitteln für spätere Berechnung
+$querygesamt = "SELECT count(*) FROM antwort ,geantwortet WHERE antwort.fid =".$fid." AND antwort.aid = geantwortet.aid";
+$gesamtsumme =$dbverbindung->querysingle($querygesamt);
 ?>
 
 <div>
 	<h2>Auswertung</h2>
 	<p>Vielen Dank für Ihre Antwort.</p>
 	<h3><?php echo $frage ?></h3>
-<?php
-//Antwortmöglichkeiten aus DB holen
-$queryeinzel ="Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
-$einzel =$dbverbindung->query($queryeinzel);
+	<?php
+	//Antwortmöglichkeiten aus DB holen
+	$queryeinzel ="Select txt, aid, nr from antwort where fid =".$fid." order by nr asc";
+	$einzel =$dbverbindung->query($queryeinzel);
 
-	for ($i = 1; $i <= $anzahlant; $i++) {
-	
-			
-			$antwortm = $einzel->fetch_row();
-			echo $antwortm[0];
+	for ($i = 1; $i <= $anzahlant; $i++) {		
+		$antwortm = $einzel->fetch_row();
+		echo $antwortm[0];
 					
-			$aid = $antwortm[1];
+		$aid = $antwortm[1];
 			
-			//Anzahl der Antworten auf 1 Frage bezogen
-			$queryauswertung = "SELECT count(*) FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid;
-			$gesamtantm= $dbverbindung->querysingle($queryauswertung);
+		
+		//Anzahl der Antworten auf 1 Frage bezogen
+		$queryauswertung = "SELECT count(*) FROM antwort, geantwortet WHERE antwort.fid =".$fid." and antwort.aid = geantwortet.aid and geantwortet.aid=".$aid."and geanntwortet.fid=".$fid;
+		$gesamtantm= $dbverbindung->querysingle($queryauswertung);
 			
-			
-			// US-Zahlenformat für Bootstrap
-			$rechnungUS = (100/$gesamtsumme)*$gesamtantm;
-			$rechnungUS = number_format($rechnungUS, 2,".",",");
-			$prozentUS = $rechnungUS."%";
-			$prozentUS= strval($prozentUS);
+		// US-Zahlenformat für Bootstrap
+		$rechnungUS = (100/$gesamtsumme)*$gesamtantm;
+		$rechnungUS = number_format($rechnungUS, 2,".",",");
+		$prozentUS = $rechnungUS."%";
+		$prozentUS= strval($prozentUS);
 
-			// Deutsches Zahlenformat für den User
-			$rechnung = (100/$gesamtsumme)*$gesamtantm;
-			$rechnung = number_format($rechnung, 2,",",".");
-			$prozent = $rechnung."%";
-			$prozent= strval($prozent);
-			printf("<div class=\"progress progress-striped\">");
-			printf("<div class=\"progress-bar\" role=\"progressbar\" 
-			aria-valuenow=\"%s\"", $prozentUS);
-			printf("aria-valuemin=\"0\" aria-valuemax=\"100\"
-			style=\"width: %s\">",$prozentUS);
-			printf("<span class=\"meter\">%s</span>",$prozent);
+		// Deutsches Zahlenformat für den User
+		$rechnung = (100/$gesamtsumme)*$gesamtantm;
+		$rechnung = number_format($rechnung, 2,",",".");
+		$prozent = $rechnung."%";
+		$prozent= strval($prozent);
+		printf("<div class=\"progress progress-striped\">");
+		printf("<div class=\"progress-bar\" role=\"progressbar\" 
+		aria-valuenow=\"%s\"", $prozentUS);
+		printf("aria-valuemin=\"0\" aria-valuemax=\"100\"
+		style=\"width: %s\">",$prozentUS);
+		printf("<span class=\"meter\">%s</span>",$prozent);
 		printf("</div>");
-	printf("</div>");
-}
-$dbverbindung->close();
-?>
+		printf("</div>");
+	}
+	$dbverbindung->close();
+	?>
 </div>
-<a class="btn btn-default" href="/frage">Nächste Frage</a>
+<a class="btn btn-default" href="/index.php?show=frage">Nächste Frage</a>
 
 

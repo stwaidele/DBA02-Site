@@ -24,10 +24,19 @@ select count(geantwortet.aid)
 
 # Die abgegebenen Antworten für Frage 1:
 # (Wird für die Auswertung benötigt)
-select antwort.txt, count(geantwortet.aid) 
+# Altes Schema, stake Entities
+select antwort.txt, count(*) 
 	from antwort, geantwortet 
-	where geantwortet.aid = antwort.aid and antwort.fid = 1 
+	where geantwortet.aid = antwort.aid 
+		and antwort.fid = 1 
 	group by geantwortet.aid;
+# Neues Schema, schwache Entities
+select antwort.txt, count(*)
+	from antwort, geantwortet 
+	where geantwortet.aid = antwort.aid 
+		and antwort.fid = 1
+		and geantwortet.fid = 1 
+	group by geantwortet.aid;	
 
 # Neue Frage Speichern
 insert into frage (txt) value ('%s');
