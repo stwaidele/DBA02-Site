@@ -2,14 +2,8 @@
 // Verbindung zur DB herstellen
 $sql = new SQL;
 
-// FID aus der URL lesen bzw. zufällig bestimmen
+// FID aus der URL lesen
 $f = $_GET["fid"];
-/* 
-	if ($f="zufall") {
-	//Erzeugung einer Zufallszahl zur Auswahl der Frage
-	$f = mt_rand(1, $sql->getAnzahlFragen());
-}
-*/
 
 // Fragetext und Antwortmöglichkeiten aus der Datenbank lesen
 $fragetext = $sql->getFrageText($f);
@@ -25,7 +19,6 @@ $antwortmoeglichkeiten = $sql->getAntwortmoeglichkeiten($f);
 			<input type="hidden" name="fid" value="<?php echo $f; ?>" />
 <?php
 	//Schleife durch Antwortmöglichkeiten
-	$i = 0;
 	foreach ($antwortmoeglichkeiten as $awm) {
 ?>
         <div class="checkbox">

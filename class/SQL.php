@@ -18,9 +18,37 @@ class SQL extends Datenbank {
 			$result = $stmt->fetch(PDO::FETCH_OBJ);
 			return $result->anz;			
 		} catch(PDOExecption $e) { 
-			$this->dbh->rollback(); 
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		}
+	}
+
+	public function getAnzahlAntworten($f) {
+		# Die Anzahl der für Frage $f gegebenen Antworten
+		# (Wird für die Auswertung benötigt -> 100%) 
+		try {
+			$stmt = $this->dbh->prepare("select count(*) as anz from antwort, geantwortet where geantwortet.aid = antwort.aid and antwort.fid = :f and geantwortet.fid = :f");
+			$stmt->bindParam(':f', $f);
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_OBJ);
+			return $result->anz;			
+		} catch(PDOExecption $e) { 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		}
+	}
+
+	public function getAntworten($f) {
+		# Listet alle für Frage f gegebenen Antworten auf:
+		# (Wird für die Auswertung / Anzeige benötigt)
+		try {			
+			$stmt = $this->dbh->prepare("select antwort.aid, antwort.txt, count(*) as anz from antwort, geantwortet where geantwortet.aid = antwort.aid  and antwort.fid = :f and geantwortet.fid = :f  group by geantwortet.aid;" );
+			$stmt->bindParam(':f', $f);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+			return $result;
+		}
+		catch(PDOExecption $e) { 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
 	}
 	
 	public function getFrageText($f) {
@@ -33,7 +61,6 @@ class SQL extends Datenbank {
 			$result = $stmt->fetch(PDO::FETCH_OBJ);
 			return $result->txt;			
 		} catch(PDOExecption $e) { 
-			$this->dbh->rollback(); 
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		} 	
 	}
@@ -49,7 +76,6 @@ class SQL extends Datenbank {
 			return $result;
 		}
 		catch(PDOExecption $e) { 
-			$this->dbh->rollback(); 
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		} 		
 	}
@@ -63,7 +89,6 @@ class SQL extends Datenbank {
 			$result = $stmt->fetch(PDO::FETCH_OBJ);
 			return $result->pw;
 		} catch(PDOExecption $e) { 
-			$this->dbh->rollback(); 
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		} 
 	}
@@ -96,5 +121,25 @@ class SQL extends Datenbank {
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		} 
 	}	
+
+	public function setGegebeneAntworten($f, $gegebene) {
+		try {
+			// Alle gegebenen Antworten werden in einer Transaktion gespeichert
+			// -> Entweder alle oder gar nichts
+			$this->dbh->beginTransaction();
+			
+			// Antworten speichern
+			$stmt = $this->dbh->prepare("insert into geantwortet (aid, fid) values (:a, :f)" );
+			$stmt->bindParam(':f', $f);
+			$stmt->bindParam(':a', $a);
+			foreach ($gegebene as $a) {
+				$stmt->execute();
+			}
+			$this->dbh->commit();
+		} catch(PDOExecption $e) { 
+			$this->dbh->rollback(); 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
+	}
 }
 ?>
