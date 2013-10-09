@@ -40,7 +40,7 @@ class SQL extends Datenbank {
 		# Listet alle für Frage f gegebenen Antworten auf:
 		# (Wird für die Auswertung / Anzeige benötigt)
 		try {			
-			$stmt = $this->dbh->prepare("select antwort.aid, antwort.txt, count(*) as anz from antwort, geantwortet where geantwortet.aid = antwort.aid  and antwort.fid = :f and geantwortet.fid = :f  group by geantwortet.aid;" );
+			$stmt = $this->dbh->prepare("select antwort.aid, antwort.txt, count(*) as anz from antwort, geantwortet where geantwortet.aid = antwort.aid  and antwort.fid = :f and geantwortet.fid = :f  group by geantwortet.aid" );
 			$stmt->bindParam(':f', $f);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_BOTH);
@@ -141,5 +141,35 @@ class SQL extends Datenbank {
 			print "Error!: " . $e->getMessage() . "</br>"; 
 		} 		
 	}
+	
+	public function getNeueFragen() {
+		# Die drei neusten Fragen, d.h. mit der höchsten FID
+		# (Wird für Sidebar benötigt)
+		try {			
+			$stmt = $this->dbh->prepare("select * from frage order by fid desc limit 0,3");
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+			return $result;
+		}
+		catch(PDOExecption $e) { 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
+	}
+
+	public function getBeliebteFragen() {
+		# Die drei beliebtesten Fragen, d.h. mit den Antworten
+		# der meisten Benutzer
+		# (Wird für Sidebar benötigt)
+		try {			
+			$stmt = $this->dbh->prepare("select count(*) c, fid, txt from (select distinct g.zs, g.fid, f.txt from geantwortet g, frage f where g.fid=f.fid) as ttbl group by fid order by c desc limit 0,3");
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_BOTH);
+			return $result;
+		}
+		catch(PDOExecption $e) { 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
+	}
+
 }
 ?>

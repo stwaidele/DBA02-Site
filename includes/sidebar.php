@@ -1,26 +1,19 @@
 <?php
 // Verbindung zur DB herstellen
-$dbverbindung = new mydb();
+$sql = new SQL;
 
 // Die 3 Fragen mit der höchsten FID
-$queryneuefrage = "select * from frage order by fid desc limit 0,3";
-$anzahlneu =$dbverbindung->queryanzahl($queryneuefrage);
-$neuefragen = $dbverbindung->query($queryneuefrage);
+$neuefragen = $sql->getNeueFragen();
 
 // Die 3 beliebtesten Fragen
-$querypopfragen = "SELECT count(fid) as c, fid, txt  FROM (select count(a.fid) as c, a.fid, g.zs, f.txt from antwort a, geantwortet g, frage f WHERE g.aid=a.aid and a.fid = f.fid GROUP BY g.zs, a.fid) AS tbl GROUP BY fid ORDER BY c DESC LIMIT 0,3;";
-$anzahlpop =$dbverbindung->queryanzahl($querypopfragen);
-$popfragen=$dbverbindung->query($querypopfragen);
-
+$beliebtefragen = $sql->getBeliebteFragen();
 ?>
 <div ID="popular">
 	<h3>Beliebte Fragen</h3>
 	<ul>
 		<?php
-		for ($i = 1; $i <= $anzahlpop; $i++) {
-			
-			$popfrage =$popfragen->fetch_array();
-			printf ('<li><a href="/index.php?show=frage&fid=%s">%s</a></li>', $popfrage[1], $popfrage[2]);
+		foreach($beliebtefragen as $beliebtefrage) {
+			printf ('<li><a href="/index.php?show=frage&fid=%s">%s</a></li>', $beliebtefrage['fid'], $beliebtefrage['txt']);
 		} 
 		?>			
 	</ul>
@@ -29,10 +22,8 @@ $popfragen=$dbverbindung->query($querypopfragen);
 	<h3>Neue Fragen</h3>
 	<ul>
 		<?php
-		for ($i = 1; $i <= $anzahlneu; $i++) {
-			
-			$neuefrage = $neuefragen->fetch_array();
-			printf ('<li><a href="/index.php?frage&fid=%s">%s</a></li>', $neuefrage[0], $neuefrage[1]);
+		foreach($neuefragen as $neuefrage) {
+			printf ('<li><a href="/index.php?show=frage&fid=%s">%s</a></li>', $neuefrage['fid'], $neuefrage['txt']);
 		} 
 		?>			
 	</ul>
