@@ -171,5 +171,19 @@ class SQL extends Datenbank {
 		} 		
 	}
 
+	public function getDringendsteFrage() {
+		# Die Frage mit den wenigsten Antworten
+		# (Wird angezeigt, wenn keine FID gewählt wird)
+		try {			
+			$stmt = $this->dbh->prepare("select fid from (select distinct g.zs, g.fid, f.txt from geantwortet g, frage f where g.fid=f.fid) as ttbl group by fid order by count(*)  limit 0,1");
+			$stmt->execute();
+			$result = $stmt->fetch(PDO::FETCH_OBJ);
+			return $result->fid;
+		}
+		catch(PDOExecption $e) { 
+			print "Error!: " . $e->getMessage() . "</br>"; 
+		} 		
+	}
+
 }
 ?>

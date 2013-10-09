@@ -1,0 +1,52 @@
+body {
+	background: #99f;
+}
+
+.container {
+	background: #fff;
+	border-left: 1px solid #ddd;	
+	border-right: 1px solid #ddd;	
+	border-bottom: 1px solid #ddd;	
+}
+
+.eigeneantwort {
+	font-weight: bold;
+}
+
+.abszahl {
+	font-size: 0.8em;
+}
+
+#titel {
+	border-bottom: 2px solid #00a;
+}
+
+#popular h3{
+	padding-bottom: 3px;
+	border-bottom: 1px solid #d4d;
+}
+#popular a:hover{
+	color: #d4d;
+	text-decoration: none;
+}
+#new h3{
+	padding-bottom: 3px;
+	border-bottom: 1px solid #0d0;
+}
+#new a:hover{
+	color: #0d0;
+	text-decoration: none;
+}
+#more h3{
+	padding-bottom: 3px;
+	border-bottom: 1px solid #88d;
+}
+#more a:hover{
+	color: #88d;
+	text-decoration: none;
+}
+
+#fusszeile {
+	margin-top: 10px;
+	border-top: 2px solid #00a;
+}

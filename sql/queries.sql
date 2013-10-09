@@ -18,13 +18,13 @@ select aid, txt
 
 # Die Anzahl der für Frage 1 abgegebenen Antworten ( -> 100%):
 # (Wird für die Auswertung benötigt)
-select count(geantwortet.aid) 
-	from antwort, geantwortet 
-	where geantwortet.aid = antwort.aid and antwort.fid = 1;
-
+select count(*) 
+	from antwort, geantwortet  
+	where geantwortet.aid = antwort.aid  and antwort.fid = 3 and geantwortet.fid = 3;
+	
 # Die abgegebenen Antworten für Frage 1:
 # (Wird für die Auswertung benötigt)
-# Altes Schema, stake Entities
+# Altes Schema, starke Entities
 select antwort.txt, count(*) 
 	from antwort, geantwortet 
 	where geantwortet.aid = antwort.aid 
